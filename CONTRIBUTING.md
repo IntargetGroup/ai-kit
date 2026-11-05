@@ -8,9 +8,7 @@ Never commit names of colleagues or client people, client or brand names, costs,
 
 Pushing a branch to this repository publishes it, even before a PR.
 
-`node scripts/check.mjs` catches the mechanical part in file text and file paths: emails, ID-shaped strings, key shapes, cloud hosts, currency amounts, binary files nobody has reviewed, and the patterns in [scripts/denylist.txt](scripts/denylist.txt). Names never go in that file, because it is public too. They go in the `CHECK_DENYLIST` repository secret, one regex per line. CI runs the secret only on push to `main`, because a pull request runs its own copy of the script. Before your first push, ask the maintainer for the private pattern file through an internal channel and run the check with it ([below](#check-locally)). Without it, the first name check runs after merge, when the text is already public.
-
-A false positive on `email`, `indeck-id`, `cloud-host` or `money`: add `<!-- check:allow=<rule> -->` to that line. Credentials and denylist matches cannot be allowed.
+No script checks names or internal details: you are the check. Read your diff for them before you push. CI scans for secrets (gitleaks) only.
 
 ### If something leaked
 
@@ -46,19 +44,7 @@ Node 22 or newer, no install step:
 node scripts/check.mjs
 ```
 
-To include the private patterns, keep the maintainer's file outside the repo and load it into `CHECK_DENYLIST`. Patterns run with the `u` flag: next to accented letters, use `(?<![\p{L}\p{N}])` and `(?![\p{L}\p{N}])` as word edges, because `\b` only knows ASCII. Windows (PowerShell):
-
-```powershell
-$env:CHECK_DENYLIST = Get-Content -Raw ~\ai-kit-denylist.txt; node scripts/check.mjs
-```
-
-macOS:
-
-```sh
-CHECK_DENYLIST="$(cat ~/ai-kit-denylist.txt)" node scripts/check.mjs
-```
-
-CI runs the same script (with the private patterns on push to `main`), a secret scan of the full history ([gitleaks](https://github.com/gitleaks/gitleaks)) and an external link check ([lychee](https://github.com/lycheeverse/lychee)). All three must pass before merge.
+It checks only exact things: page budgets, the instruction blocks' length, the intentional copies (org instructions and `claudeMd`, the folder template, the setup prompt) and links to files in this repository. A failure is always real. CI runs the same script and a secret scan of the full history ([gitleaks](https://github.com/gitleaks/gitleaks)).
 
 ## Open the pull request
 

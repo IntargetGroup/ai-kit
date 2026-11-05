@@ -1,15 +1,11 @@
 #!/usr/bin/env node
-// Repository checks for ai-kit: size budgets, copies in sync, public-safety patterns, links to the repo.
+// Repository checks for ai-kit. Every check is exact, so a failure is always a real problem:
+//   - size budgets (lines per page, characters of the pasteable instruction blocks);
+//   - intentional copies stay identical (org instructions in claudeMd, folder template, setup prompt);
+//   - links to files in this repository resolve, with exact case.
+// No pattern matching on content: examples and fake data never trip it.
 //
 //   node scripts/check.mjs        Node >= 22, no dependencies, exit 1 on any problem.
-//
-// Scans every file git tracks or would track (untracked files that are not ignored count too):
-// the text of each file and its path. Binary files are reported until someone has reviewed them.
-// Extra patterns: scripts/denylist.txt (public, generic) and CHECK_DENYLIST (private, one regex
-// per line; CI passes the repository secret on push to main only). Safety findings print
-// file:line:col and the rule name, never the matched text, because CI logs of a public repo are public.
-// A false positive: add `check:allow=<rule>[,<rule>]` to that line, e.g. <!-- check:allow=indeck-id -->.
-// Only the rules in ALLOWABLE can be allowed; credentials and denylist matches never can.
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -40,15 +36,6 @@ const UNBUDGETED = new Set(['CHANGELOG.md']);
 const BEGIN = '<!-- begin -->';
 const END = '<!-- end -->';
 
-const ALLOWED_EMAILS = new Set(['noreply@anthropic.com', 'git@github.com']);
-
-/** Rules a `check:allow=<rule>` marker may switch off for one line. */
-const ALLOWABLE = new Set(['email', 'indeck-id', 'cloud-host', 'money']);
-const ALLOW_MARKER = /check:allow=([a-z,-]+)/;
-
-/** Binary files a maintainer has opened and checked (content and metadata). Paths, exact case. */
-const BINARY_ALLOW = new Set([]);
-
 /** Intentional copies: [source, copy, what, the part that must be identical]. checkSync also checks the org copy. */
 const TEXT_FENCE = /^```text\n([\s\S]*?)^```$/m;
 const COPIES = [
@@ -59,22 +46,7 @@ const COPIES = [
 /** Absolute links to this repository's main branch; check.mjs resolves them against the tree. */
 const SELF_URL = /https:\/\/(?:github\.com\/IntargetGroup\/ai-kit\/(?:blob|tree)\/main|raw\.githubusercontent\.com\/IntargetGroup\/ai-kit\/main)(?:\/([^\s)>\]"'`«»<]*))?/g;
 
-/** Built-in safety rules: [name, what it means, regex, optional filter on the match]. */
-const SAFETY = [
-  ['email', 'email address', /[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}/g,
-    (m) => !ALLOWED_EMAILS.has(m.toLowerCase()) && !/@example\.(?:com|org|net)$/i.test(m)],
-  // Indeck workspace/project ids are 21-char nanoids; requiring all three character classes
-  // keeps kebab-case words and camelCase setting names out.
-  ['indeck-id', 'looks like an Indeck id (21-char nanoid)', /(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{21}(?![A-Za-z0-9_-])/g,
-    (m) => /[a-z]/.test(m) && /[A-Z]/.test(m) && /\d/.test(m)],
-  ['credential', 'looks like a key or token',
-    /(?<![A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|sb_(?:publishable|secret)_[A-Za-z0-9_-]{10,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AIza[A-Za-z0-9_-]{30,}|xox[abpr]-[A-Za-z0-9-]{10,})|-{5}BEGIN/g],
-  ['cloud-host', 'internal cloud host or region', /\brun\.app\b|\beurope-west\d\b/g],
-  ['money', 'currency amount',
-    /€\s?\d|\d[\d.,]*\s?[kKmM]?\s?€|\$\d|\d[\d.,]*\s?[kK]\$|\b\d[\d.,]*\s?(?:euro|EUR|USD|dollari)\b/g],
-];
-
-const problems = { budgets: [], sync: [], safety: [], links: [] };
+const problems = { budgets: [], sync: [], links: [] };
 const report = (kind, file, line, col, message) => problems[kind].push({ file, line, col, message });
 
 function listFiles() {
@@ -88,42 +60,12 @@ function listFiles() {
       continue; // deleted in the working tree, or a directory entry (submodule)
     }
     if (buf.subarray(0, 8000).includes(0)) {
-      // Patterns cannot read a screenshot, a PDF or a .DS_Store; a person must. The path is still checked.
-      if (!BINARY_ALLOW.has(path)) report('safety', path, 0, 0, 'binary file: open it and check content and metadata, then add its path to BINARY_ALLOW in scripts/check.mjs');
-      files.push({ path, text: null });
+      files.push({ path, text: null }); // binary: no text to check
       continue;
     }
     files.push({ path, text: buf.toString('utf8').replace(/\r\n/g, '\n') });
   }
   return files;
-}
-
-function loadDenylist() {
-  const sources = [];
-  try {
-    sources.push(['scripts/denylist.txt', readFileSync(join(ROOT, 'scripts/denylist.txt'), 'utf8')]);
-  } catch {
-    report('safety', 'scripts/denylist.txt', 0, 0, 'missing');
-  }
-  if (process.env.CHECK_DENYLIST) sources.push(['CHECK_DENYLIST', process.env.CHECK_DENYLIST]);
-  else if (process.env.CHECK_DENYLIST_REQUIRED === '1') {
-    report('safety', 'CHECK_DENYLIST', 0, 0, 'empty: private patterns were not checked (set the repository secret)');
-  }
-  const rules = [];
-  for (const [source, text] of sources) {
-    text.split(/\r?\n/).forEach((raw, i) => {
-      const pattern = raw.trim();
-      if (!pattern || pattern.startsWith('#')) return;
-      try {
-        // u: \p{L} works, so a pattern can mark word edges next to accented letters (\b cannot).
-        rules.push(['denylist', `matches ${source} line ${i + 1}`, new RegExp(pattern, 'giu')]);
-      } catch (error) {
-        // The engine's message quotes the pattern: never print it for the private list.
-        report('safety', source, i + 1, 1, source === 'CHECK_DENYLIST' ? 'invalid regex' : `invalid regex: ${error.message}`);
-      }
-    });
-  }
-  return rules;
 }
 
 function countLines(text) {
@@ -195,31 +137,6 @@ function checkSync(files) {
   }
 }
 
-let allowedMatches = 0;
-
-function checkSafety(files, rules) {
-  const scan = (path, line, lineNo, allow) => {
-    for (const [name, meaning, regex, keep] of rules) {
-      for (const match of line.matchAll(regex)) {
-        if (keep && !keep(match[0])) continue;
-        if (allow.has(name)) allowedMatches++;
-        else report('safety', path, lineNo, lineNo && match.index + 1, `${name}${lineNo ? '' : ' in the file path'}: ${meaning}`);
-      }
-    }
-  };
-  for (const { path, text } of files) {
-    scan(path, path, 0, new Set());
-    if (text === null) continue;
-    text.split('\n').forEach((line, i) => {
-      const names = line.match(ALLOW_MARKER)?.[1].split(',') ?? [];
-      for (const name of names) {
-        if (!ALLOWABLE.has(name)) report('safety', path, i + 1, 1, `check:allow=${name}: only ${[...ALLOWABLE].join(', ')} can be allowed`);
-      }
-      scan(path, line, i + 1, new Set(names.filter((name) => ALLOWABLE.has(name))));
-    });
-  }
-}
-
 const INLINE_LINK = /!?\[(?:[^\]\\]|\\.)*\]\(\s*(<[^>]*>|[^\s)]+)(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?\s*\)/g;
 const REFERENCE_DEF = /^ {0,3}\[[^\]]+\]:\s*(<[^>]*>|\S+)/g;
 
@@ -285,18 +202,16 @@ try {
 }
 checkBudgets(files);
 checkSync(files);
-checkSafety(files, [...SAFETY, ...loadDenylist()]);
 checkLinks(files);
 
 const total = Object.values(problems).reduce((n, list) => n + list.length, 0);
-const allowed = allowedMatches ? `, ${allowedMatches} match${allowedMatches === 1 ? '' : 'es'} allowed by check:allow` : '';
 if (total === 0) {
-  console.log(`check.mjs: ${files.length} files, no problems${allowed}.`);
+  console.log(`check.mjs: ${files.length} files, no problems.`);
   process.exit(0);
 }
 
 const annotate = process.env.GITHUB_ACTIONS === 'true';
-console.log(`check.mjs: ${total} problem${total === 1 ? '' : 's'} in ${files.length} files${allowed}\n`);
+console.log(`check.mjs: ${total} problem${total === 1 ? '' : 's'} in ${files.length} files\n`);
 for (const [kind, list] of Object.entries(problems)) {
   if (!list.length) continue;
   console.log(kind);
@@ -305,9 +220,5 @@ for (const [kind, list] of Object.entries(problems)) {
     if (annotate) console.log(`::error file=${file}${line ? `,line=${line},col=${col}` : ''}::${kind}: ${message}`);
   }
   console.log('');
-}
-if (problems.safety.length) {
-  console.log('Safety: remove the text. A false positive on email, indeck-id, cloud-host or money: add check:allow=<rule> to that line (<!-- check:allow=indeck-id --> in Markdown).');
-  console.log('Something real already pushed: see CONTRIBUTING.md, "If something leaked".');
 }
 process.exit(1);

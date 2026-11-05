@@ -14,7 +14,7 @@ The kit is rewritten from scratch. Links to v1 files no longer work. If you have
 - [kit/primo-workspace/](kit/primo-workspace/LEGGIMI.md): a starter working folder (`Lavoro-Claude`).
 - [secondo-cervello/](secondo-cervello/README.md): a light variant (one folder plus Indeck, the default) and the full Obsidian vault pattern.
 - [engineering/](engineering/README.md): per-repo AGENTS.md practice, a bounded agent-memory harness, the reference stack.
-- [scripts/check.mjs](scripts/check.mjs) and CI: size budgets, copies kept identical, public-safety patterns, link checks, secret scan.
+- [scripts/check.mjs](scripts/check.mjs) and CI: size budgets, copies kept identical, internal links (exact checks only), secret scan.
 
 ### Changed
 
