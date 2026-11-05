@@ -1,0 +1,12 @@
+# Operating system clutter: it can list file names from the folder.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Personal zips of the kit are built from kit/primo-workspace/, never committed.
+*.zip
+
+# Local secrets and personal agent settings.
+.env*
+.claude/settings.local.json
+CLAUDE.local.md
