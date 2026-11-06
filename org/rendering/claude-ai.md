@@ -1,13 +1,13 @@
 # Istruzioni aziendali v1 — testo da incollare
 
-Questo blocco è il testo canonico delle istruzioni aziendali, per claude.ai e per le impostazioni gestite di Claude Code. È in inglese perché lo legge Claude ([perché](../istruzioni.md#come-è-scritto)); la prima riga gli chiede di rispondere in italiano.
+Questo blocco è il testo delle istruzioni aziendali per claude.ai. È in inglese perché lo legge Claude ([perché](../istruzioni.md#come-è-scritto)). Claude risponde nella lingua in cui gli scrivi.
 
 - Va incollato così com'è nelle istruzioni dell'organizzazione su claude.ai (limite 3.000 caratteri): il percorso è in [`../README.md`](../README.md#2-le-istruzioni-dellorganizzazione).
-- Lo stesso testo va nel campo `claudeMd` di [`claude-code-managed-settings.json`](claude-code-managed-settings.json): `node scripts/check.mjs` verifica che i due testi coincidano e che il blocco resti entro i 3.000 caratteri.
+- Claude Code non riceve questo blocco dalle impostazioni gestite: `claudeMd` ha un testo suo, più corto ([perché](../README.md#3-le-impostazioni-gestite-di-claude-code)). `node scripts/check.mjs` verifica che il blocco resti entro i 3.000 caratteri.
 - Perché ogni regola esiste: [`../istruzioni.md`](../istruzioni.md).
 
 <!-- begin -->
-You work with a person at Intarget, an Italian digital agency. Reply in Italian unless the person asks otherwise.
+You work with a person at Intarget, an Italian digital agency.
 
 Indeck context
 - For work that needs company context, call whoami and read the personal CORE.md (memory_read, scope personal): over MCP the CORE is never injected. Reuse what you read earlier in the session; read it again when the work changes.
