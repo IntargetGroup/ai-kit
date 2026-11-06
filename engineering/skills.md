@@ -63,12 +63,14 @@ When a project or personal skill named `verify` or `simplify` exists at session 
 | Plugin | What it adds | Use when |
 |---|---|---|
 | `skill-creator` | create, eval, benchmark and tune skills (§8) | you write or maintain skills |
-| `superpowers` | a methodology: brainstorming, written plans, subagent-driven development with review, red/green TDD | work that earns the full process ([knowledge-management-spec.md §2](knowledge-management-spec.md#2-ceremony-by-task-size)); overhead for small tasks |
+| `superpowers` | a methodology: brainstorming, written plans, subagent-driven development with review, red/green TDD | try it for brainstorming and spec writing; read the note below first |
 | `pr-review-toolkit` | review agents for comments, tests, error handling, type design, simplification | a deep PR review |
 | `frontend-design` | guidance for distinctive UI instead of generic defaults | UI work |
 | `hookify` | writes hooks from rules you state | a rule keeps getting missed and belongs in a hook |
 | `claude-md-management` | audits and updates `CLAUDE.md` files | keeping instruction files current |
 | `github` | the GitHub MCP server | issue and PR work beyond the `gh` CLI |
+
+**A note on `superpowers`, from the maintainer (2026-11).** Try it: it is a good plugin, and its brainstorming and spec writing helped me at times. Its plans were useless, at least for me, and in my experience it limits Opus 5.5. I no longer use it. If you try it, compare the result with Claude working from a plain spec and a "done when" check ([knowledge-management-spec.md §7](knowledge-management-spec.md#7-specs-and-plans)), and keep it only if it wins on your work.
 
 A listing in the official marketplace does not mean Anthropic wrote the plugin. `superpowers` and others point at third-party repositories, pinned to a commit. Audit them like any third-party code.
 

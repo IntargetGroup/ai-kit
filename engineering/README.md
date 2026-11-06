@@ -114,7 +114,11 @@ In a public repo, never write Indeck workspace or project ids, client names or i
 
 ## 5. Plugins and MCP servers worth it
 
-Install few. Each one adds tool names, skills and possibly hooks to every session.
+Keep only what you strictly need in this project. Every plugin, skill and MCP server adds tool names, skill listings and possibly hooks to every session; more tools do not make outcomes better, and overlapping ones make the agent pick wrong ([tool-orchestration.md §1.1](tool-orchestration.md#11-fewer-higher-level-tools)).
+
+- Install at project or local scope, not user scope, unless you need the tool in every repo ([plugin scopes](https://code.claude.com/docs/en/plugins/install#choose-an-install-scope); `claude mcp add` writes to local scope by default, [MCP scopes](https://code.claude.com/docs/en/mcp#mcp-installation-scopes)).
+- Turn off a server you do not need here in `/mcp`: Claude Code records the choice for this project only and keeps the configuration ([disable a server](https://code.claude.com/docs/en/mcp#disable-a-server-without-removing-it)).
+- Every month, remove what you did not use. `/skill-doctor` flags skills that never run ([skills.md §3](skills.md#3-what-a-skill-costs)).
 
 | Tool | Why | Install |
 |---|---|---|

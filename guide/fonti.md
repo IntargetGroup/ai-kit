@@ -10,7 +10,7 @@ Claude lavora bene quando legge la fonte giusta e solo i dati che servono al com
 
 ## Le regole
 
-Valgono per ogni fonte. Sono le stesse delle [istruzioni aziendali](../org/rendering/claude-ai.md).
+Valgono per ogni fonte e seguono le [istruzioni aziendali](../org/rendering/claude-ai.md).
 
 - **Solo i dati che servono al compito.** Collegare un servizio non autorizza a copiarne tutto il contenuto.
 - **I dati di un cliente servono solo per quel cliente.** Non portarli nel lavoro o nella memoria di un altro.
@@ -18,6 +18,7 @@ Valgono per ogni fonte. Sono le stesse delle [istruzioni aziendali](../org/rende
 - **In memoria va il link, non la copia.** Un documento su Drive resta su Drive.
 - **Nessun dato personale nelle ricerche su fonti esterne.** Niente nomi di persone in Statista, Semrush o negli strumenti di scraping.
 - **Solo account aziendali.** Mai un account personale per dati di Intarget o dei clienti.
+- **Tieni attivo solo ciò che usi.** Ogni connettore, skill o plugin attivo aggiunge strumenti tra cui Claude deve scegliere, in ogni conversazione. Collega quello che serve al tuo lavoro e scollega il resto in Personalizza → Connettori.
 - **Niente strumenti di terzi che non sai valutare.** Prima di installare una skill, un server MCP o un'estensione di terzi, chiedi all'Innovation Hub.
 
 ## 1. Indeck

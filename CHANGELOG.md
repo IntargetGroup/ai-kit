@@ -16,6 +16,7 @@ Changes that alter what a reader does, newest first.
 - [engineering/knowledge-management-spec.md](engineering/knowledge-management-spec.md) and [engineering/BOOTSTRAP.md](engineering/BOOTSTRAP.md): agent state, decisions, plans and long runs on a codebase, with a paste-in installer.
 - [guide/presentazione.pdf](guide/presentazione.pdf): the kit in 20 slides, in Italian.
 - [engineering/patterns.md](engineering/patterns.md), [multi-model-orchestration.md](engineering/multi-model-orchestration.md), [skills.md](engineering/skills.md); [tool-orchestration.md](engineering/tool-orchestration.md) regains its depth.
+- Keep only the plugins, skills and MCP servers a project strictly needs, at project or local scope ([engineering/README.md §5](engineering/README.md#5-plugins-and-mcp-servers-worth-it); for connectors, [guide/fonti.md](guide/fonti.md)). The maintainer's note on `superpowers` is in [engineering/skills.md](engineering/skills.md#4-choosing-skills).
 
 ### Removed
 
