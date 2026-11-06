@@ -6,7 +6,7 @@ Per chi è Owner dell'organizzazione Intarget su Claude (piano Team). Qui trovi 
 |---|---|
 | [`istruzioni.md`](istruzioni.md) | il perché di ogni regola, per chi deve approvarle |
 | [`rendering/claude-ai.md`](rendering/claude-ai.md) | **il testo canonico** (≤ 3.000 caratteri, in inglese perché lo legge Claude) |
-| [`rendering/claude-code-managed-settings.json`](rendering/claude-code-managed-settings.json) | impostazioni gestite di Claude Code: lo stesso testo in `claudeMd`, il blocco della lettura delle credenziali, un avviso all'avvio |
+| [`rendering/claude-code-managed-settings.json`](rendering/claude-code-managed-settings.json) | impostazioni gestite di Claude Code: le regole di governance in `claudeMd`, il blocco della lettura delle credenziali, un avviso all'avvio |
 | [`rendering/indeck-mcp-server-instructions.md`](rendering/indeck-mcp-server-instructions.md) | le istruzioni che il server MCP di Indeck invia a ogni client, in produzione dal 2026-11-06 |
 
 ## Prima di pubblicare
@@ -44,7 +44,7 @@ Su claude.ai, come Owner: [Impostazioni dell'organizzazione → Claude Code (Org
 Prima di salvare, guarda il pulsante. Se dice Add with errors o Update with errors, l'editor ha trovato un errore di schema nel JSON. Il pulsante salva lo stesso, ma questo file non deve produrre errori: correggi prima di salvare.
 
 Cosa fa:
-- `claudeMd`: lo stesso testo delle istruzioni aziendali, caricato come CLAUDE.md gestito prima dei CLAUDE.md personali e di progetto. I testi si sommano, non si sostituiscono. Una persona non può escluderlo con `claudeMdExcludes`; una sessione avviata con il caricamento dei CLAUDE.md disattivato non carica neanche questo ([CLAUDE.md per l'organizzazione](https://code.claude.com/docs/en/memory#deploy-organization-wide-claude-md)). È una guida per Claude, non un blocco tecnico.
+- `claudeMd`: un CLAUDE.md gestito, caricato in ogni sessione prima dei CLAUDE.md personali e di progetto. I testi si sommano, non si sostituiscono. Contiene solo ciò che nessun altro testo copre: Indeck solo quando il lavoro richiede conoscenza aziendale, e cosa fare se non è collegato; i dati di un cliente solo per quel cliente; niente dati personali sensibili né giudizi sulle persone in memoria; niente profilazione dei colleghi. Non ripete le istruzioni del server Indeck, che Claude Code carica già, né le conferme prima delle azioni rischiose, che Claude Code chiede già. Non dice come lavorare: per quello valgono la persona e il CLAUDE.md del progetto. Così vale per chi non programma e non intralcia gli sviluppatori. Una persona non può escluderlo con `claudeMdExcludes`; una sessione avviata con il caricamento dei CLAUDE.md disattivato non carica neanche questo ([CLAUDE.md per l'organizzazione](https://code.claude.com/docs/en/memory#deploy-organization-wide-claude-md)). È una guida per Claude, non un blocco tecnico.
 - `permissions.deny`: un blocco tecnico. Gli strumenti di file di Claude, i comandi di file che Claude Code riconosce (`cat`, `head` e simili) e le redirezioni non leggono le chiavi SSH e le credenziali AWS e Google Cloud nella cartella personale (`~/.config/gcloud` su macOS, `~/AppData/Roaming/gcloud` su Windows). Nessuna impostazione personale o di progetto può annullarlo. Non ferma uno script che apre i file da solo: per quello serve il sandbox ([regole Read e Edit](https://code.claude.com/docs/en/permissions#read-and-edit)).
 - `companyAnnouncements`: un avviso con il link a questo kit all'avvio di Claude Code nel terminale. La scheda Code non mostra gli avvisi ([differenze della scheda Code](https://code.claude.com/docs/en/desktop#claude-code-settings-that-behave-differently-in-the-code-tab)).
 
@@ -57,7 +57,7 @@ Limiti noti:
 - Le impostazioni che eseguono comandi (hook, alcune variabili d'ambiente) chiedono un'approvazione a ogni persona. `claudeMd` non la chiede da Claude Code v2.1.260; le versioni precedenti la chiedevano. Questo file non contiene impostazioni da approvare.
 - Sono un controllo sul client, non un confine di sicurezza: su un computer non gestito una persona può aggirarle.
 
-Il controllo `node scripts/check.mjs` fallisce se `claudeMd` e il blocco canonico divergono.
+Il controllo `node scripts/check.mjs` fallisce se `claudeMd` supera i 1.000 caratteri.
 
 ### 4. Le istruzioni del server MCP di Indeck
 
@@ -71,7 +71,7 @@ Un messaggio breve, dopo che i passi 1–3 funzionano:
 
 ## Verificare
 
-Fai ogni prova in una sessione nuova, con un account che non è Owner. Claude deve rispondere in italiano.
+Fai ogni prova in una sessione nuova, con un account che non è Owner.
 
 | Dove | Prova | Risultato atteso |
 |---|---|---|
@@ -79,7 +79,7 @@ Fai ogni prova in una sessione nuova, con un account che non è Owner. Claude de
 | Chat | «Chiama whoami di Indeck e dimmi chi sono» | nome, email, workspace raggiungibili |
 | Chat | una domanda generica (ricetta, traduzione) | nessuna chiamata a Indeck |
 | Cowork | una domanda aziendale, una richiesta generica, una proposta di salvataggio | legge il CORE quando serve, non chiama Indeck per la richiesta generica, chiede prima di scrivere; se una prova fallisce, le istruzioni aziendali non arrivano in Cowork |
-| Code (app desktop) | «Quali istruzioni aziendali hai? Quali connettori hai in questa sessione?» | riassume le regole della v1; elenca Indeck |
+| Code (app desktop) | «Quali istruzioni aziendali hai? Quali connettori hai in questa sessione?» | riassume le regole di `claudeMd`; elenca Indeck |
 | Claude Code (terminale) | `claude doctor` | la riga `Managed settings (remote)` dice che le impostazioni sono caricate (Claude Code v2.1.248 o successivo) |
 | Claude Code (terminale) | `/status` | la riga `Setting sources` contiene `Enterprise managed settings (remote)` |
 | Claude Code (terminale) | `/mcp` | Indeck compare tra i connettori claude.ai; se manca, `/status` mostra un accesso diverso dall'account claude.ai |
@@ -89,6 +89,6 @@ Le prove dei comandi vengono da [verificare la consegna](https://code.claude.com
 
 ## Manutenzione
 
-- Ogni modifica passa da una pull request su questo repository. Aggiorna sempre insieme il blocco canonico e `claudeMd`.
+- Ogni modifica passa da una pull request su questo repository. Una regola di governance nuova va nel blocco canonico e, se vale anche in Claude Code, in `claudeMd`.
 - Revisione mensile: togli le righe che non cambiano più nessun comportamento.
 - Annota in [`../CHANGELOG.md`](../CHANGELOG.md) ogni modifica che cambia il comportamento di Claude.
