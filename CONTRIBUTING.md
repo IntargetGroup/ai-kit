@@ -30,7 +30,7 @@ Describe what a reader hit: their role, the surface (app desktop, Cowork, Code t
 
 ## Write it
 
-- Italian for pages people read. English for `engineering/`, `AGENTS.md`, `CLAUDE.md` and this file.
+- English for every text Claude reads as instructions (templates, paste-in prompts, org instructions, specs, `engineering/`); Italian for pages people read. The full rule: [AGENTS.md](AGENTS.md#language-english-for-claude-italian-for-people).
 - Rewrite the paragraph that changed. Do not append a second account of the same thing.
 - One home per fact. Link to it instead of copying it. The organisation instructions live once, in `org/rendering/claude-ai.md`; `org/rendering/claude-code-managed-settings.json` carries a copy, and `org/istruzioni.md` explains the rules. `kit/primo-workspace/CLAUDE.md` is a copy of `inizia/modelli/CLAUDE-cartella.md`, and the prompt block in `kit/primo-workspace/LEGGIMI.md` is a copy of the one in `inizia/prompt-di-setup.md`. Change each pair together: `scripts/check.mjs` compares all three.
 - Size budgets are enforced by `scripts/check.mjs` (for example: a guide has at most 250 lines). Cut before you ask for more room.

@@ -90,7 +90,7 @@ La documentazione non dice se Cowork legge il CLAUDE.md di una cartella. Per non
 4. Incolla questa riga e salva:
 
    ```text
-   All'inizio di ogni attività leggi CLAUDE.md e STATO.md in questa cartella e seguili.
+   At the start of every task, read CLAUDE.md and STATO.md in this folder and follow them.
    ```
 
 5. Apri una nuova attività e chiedi: «Cosa dice il CLAUDE.md di questa cartella?». Dovresti vedere un riassunto del file, non una risposta generica.
@@ -115,7 +115,7 @@ Cambi modalità dal selettore nella riga sotto la casella del messaggio, anche a
 - **Lavoro condiviso o irreversibile: Plan.** Leggi il piano, approvalo, poi fallo partire.
 - **Se non vedi Auto**, l'organizzazione l'ha disattivato o il modello scelto non lo supporta. Usa Accept edits.
 
-Auto non decide al posto tuo cosa inviare o pubblicare. Il CLAUDE.md globale del kit dice a Claude: «Tu prepari, io decido: chiedimi conferma prima di inviare, pubblicare, cancellare, spendere crediti o modificare un sistema in produzione o l'account di un cliente.» Nella scheda Code le istruzioni aziendali dicono lo stesso solo dopo che l'amministratore le pubblica nelle impostazioni gestite.
+Auto non decide al posto tuo cosa inviare o pubblicare. Il CLAUDE.md globale del kit dice a Claude: «You prepare, I decide: ask for confirmation before you send, publish, delete, spend credits, or change a production system or a client's account.» Nella scheda Code le istruzioni aziendali dicono lo stesso solo dopo che l'amministratore le pubblica nelle impostazioni gestite.
 
 ### I permessi in Cowork
 

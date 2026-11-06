@@ -18,6 +18,8 @@ jobs:
         with:
           node-version: lts/*
       - run: node scripts/check.mjs
+      # The vault lint ships to readers' vaults: at least it must parse.
+      - run: node --check secondo-cervello/obsidian/lint.mjs
 
   secrets:
     name: secret scan (gitleaks, full history)

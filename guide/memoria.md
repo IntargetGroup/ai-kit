@@ -18,7 +18,7 @@ Questa pagina è la mappa della memoria. Ogni fatto ha un posto solo. Gli altri 
 | Bozze, Excel, export, risultati | file nella cartella (`input/`, `lavori/`) o su Drive | la memoria salva il link, non una copia |
 | Password, chiavi, token, stipendi, salute, informazioni HR su altri | da nessuna parte | niente |
 
-**Le preferenze hanno una fonte sola: il CORE personale.** Le leggono sia Claude sia l'app Indeck. Il CLAUDE.md globale ne tiene una riserva breve, sotto la frase «Per le preferenze vale il CORE personale di Indeck. Queste righe sono il ripiego quando Indeck non è disponibile.» Se cambi una preferenza, cambiala nel CORE. Se è anche nella riserva, cambiala anche lì.
+**Le preferenze hanno una fonte sola: il CORE personale.** Le leggono sia Claude sia l'app Indeck. Il CLAUDE.md globale ne tiene una riserva breve, sotto la frase «My personal Indeck CORE is the source of my preferences. The lines below are the fallback when Indeck is not available.» Se cambi una preferenza, cambiala nel CORE. Se è anche nella riserva, cambiala anche lì.
 
 Quando dici «ricordati che…», la cosa va qui:
 
@@ -40,20 +40,21 @@ Il **globale** vale per ogni sessione della scheda Code su questo computer. Chat
 
 Il globale dice come vuoi che Claude lavori e cosa ti chiede prima. Ripete anche, con le stesse parole, le regole aziendali su Indeck e sulle azioni: nella scheda Code le istruzioni dell'organizzazione arrivano solo con le impostazioni gestite, e per Cowork non è documentato. Non dice chi sei in dettaglio: quello è nel CORE.
 
-Esempio (estratto):
+Esempio (estratto). I due file sono in inglese perché li legge Claude; la prima riga di «How I work» gli dice di parlarti in italiano.
 
 ```markdown
-## Chi sono
-Analista ADV nel team performance. Seguo più clienti ogni settimana.
-Il mio profilo completo è nel CORE personale di Indeck: leggilo all'inizio di ogni lavoro aziendale.
+## Who I am
+Ads analyst in the performance team. I work on several clients every week.
+My full profile is in my personal Indeck CORE.
 
-## Come lavoro
-Per le preferenze vale il CORE personale di Indeck. Queste righe sono il ripiego quando Indeck non è disponibile.
-- Rispondi in italiano, prima la risposta e poi i dettagli.
-- Quando confronti numeri, usa una tabella.
+## How I work
+Talk to me in Italian.
+My personal Indeck CORE is the source of my preferences. The lines below are the fallback when Indeck is not available.
+- Format: answer first, then details.
+- Use a table when you compare numbers.
 
-## Autonomia e limiti
-- Tu prepari, io decido: chiedimi conferma prima di inviare, pubblicare, cancellare, spendere crediti o modificare un sistema in produzione o l'account di un cliente.
+## Autonomy and limits
+- You prepare, I decide: ask for confirmation before you send, publish, delete, spend credits, or change a production system or a client's account.
 ```
 
 Il **CLAUDE.md di cartella** vale solo quando lavori in quella cartella. Dice a cosa serve, a quale workspace o progetto Indeck appartiene, dove vanno i file e cosa vuol dire «fatto».
@@ -61,19 +62,20 @@ Il **CLAUDE.md di cartella** vale solo quando lavori in quella cartella. Dice a 
 Esempio (estratto):
 
 ```markdown
-## A cosa serve questa cartella
-Report mensili di performance per un cliente.
+## What this folder is for
+Monthly performance reports for a client.
 
 ## Indeck
-Workspace: «nome» («id»). Progetto: «nome» («id»).
+- Workspace: «name» («id»)
+- Project: «name» («id»)
 
-## Come si lavora qui
-- Acquisisci solo i dati che servono al compito. Gli export vanno in input/.
-- Elabora con codice tutti i record del perimetro concordato e riporta righe incluse ed escluse.
-- I report finiti vanno in lavori/<AAAA-MM>-report/.
+## How we work here
+- Acquire only the data the task needs. Save the exports you use in `input/`, then work from the file.
+- Process with code every record in the agreed scope. Report rows included and excluded.
+- Finished reports go in `lavori/YYYY-MM-report/`.
 
-## Fatto quando
-Report mensile: i totali sono riconciliati con l'export; ogni variazione sopra il 10% ha una causa documentata oppure è segnata «da verificare».
+## Done when
+- Monthly report: totals reconcile with the export; every change above 10% has a documented cause or is marked "da verificare".
 ```
 
 I modelli completi: [CLAUDE-globale.md](../inizia/modelli/CLAUDE-globale.md) e [CLAUDE-cartella.md](../inizia/modelli/CLAUDE-cartella.md).
@@ -88,7 +90,7 @@ I modelli completi: [CLAUDE-globale.md](../inizia/modelli/CLAUDE-globale.md) e [
 <summary>Risposte</summary>
 
 1. **CORE personale di Indeck**, sezione Preferences. È una tua preferenza: la seguono Claude e l'app Indeck. Claude ti chiede il sì prima di scriverla. Se la riserva nel CLAUDE.md globale parla di formato, aggiorna anche quella.
-2. **CLAUDE.md della cartella**, sezione «Come si lavora qui». Vale solo lì.
+2. **CLAUDE.md della cartella**, sezione «How we work here». Vale solo lì.
 3. **Memoria del progetto Indeck** (o del workspace, se la decisione vale oltre il progetto). Le decisioni servono ai colleghi, quindi stanno in Indeck. Non vanno nel CLAUDE.md e non vanno in `STATO.md`.
 
 </details>
@@ -111,7 +113,7 @@ Tieni corti tutti e due i file. Un file lungo costa contesto e Claude lo segue p
 Nelle altre modalità:
 
 - **Chat** non legge nessun CLAUDE.md. Legge le Istruzioni per Claude e, se l'amministratore le ha pubblicate, le istruzioni dell'organizzazione.
-- **Cowork** non legge la cartella `.claude` del tuo computer. Legge le Istruzioni per Claude e le istruzioni della cartella in Personalizza (Customize). Non è documentato che legga da solo il CLAUDE.md della cartella. Per questo, nelle istruzioni della cartella metti la riga: «All'inizio di ogni attività leggi CLAUDE.md e STATO.md in questa cartella e seguili.»
+- **Cowork** non legge la cartella `.claude` del tuo computer. Legge le Istruzioni per Claude e le istruzioni della cartella in Personalizza (Customize). Non è documentato che legga da solo il CLAUDE.md della cartella. Per questo, nelle istruzioni della cartella metti la riga: «At the start of every task, read CLAUDE.md and STATO.md in this folder and follow them.»
 
 Cosa legge ogni modalità dell'app desktop: [guide/app-desktop.md](app-desktop.md).
 
