@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Repository checks for ai-kit. Every check is exact, so a failure is always a real problem:
-//   - size budgets (lines per page, characters of the pasteable instruction blocks);
-//   - intentional copies stay identical (org instructions in claudeMd, folder template, setup prompt);
+//   - size budgets (lines per page, characters of the pasteable instruction blocks and of claudeMd);
+//   - intentional copies stay identical (folder template, setup prompt);
 //   - links to files in this repository resolve, with exact case.
 // No pattern matching on content: examples and fake data never trip it.
 //
@@ -41,7 +41,10 @@ const UNBUDGETED = new Set(['CHANGELOG.md']);
 const BEGIN = '<!-- begin -->';
 const END = '<!-- end -->';
 
-/** Intentional copies: [source, copy, what, the part that must be identical]. checkSync also checks the org copy. */
+const MANAGED_SETTINGS = 'org/rendering/claude-code-managed-settings.json';
+const CLAUDE_MD_CHARS = 1000;
+
+/** Intentional copies: [source, copy, what, the part that must be identical]. */
 const TEXT_FENCE = /^```text\n([\s\S]*?)^```$/m;
 const COPIES = [
   ['inizia/modelli/CLAUDE-cartella.md', 'kit/primo-workspace/CLAUDE.md', 'file', (text) => text],
@@ -103,9 +106,7 @@ function checkBudgets(files) {
   }
 }
 
-// The org instructions exist once (org/rendering/claude-ai.md, between the markers).
-// The managed-settings JSON carries a copy in `claudeMd`; the two must stay identical.
-// The pairs in COPIES must stay identical too: Claude must not behave differently by download path.
+// The pairs in COPIES must stay identical: Claude must not behave differently by download path.
 function checkSync(files) {
   const byPath = new Map(files.map((f) => [f.path, f.text]));
   for (const [sourcePath, copyPath, what, part] of COPIES) {
@@ -119,26 +120,26 @@ function checkSync(files) {
     if (a === undefined || b === undefined) report('sync', copyPath, 0, 0, `${what} not found in ${a === undefined ? sourcePath : copyPath}`);
     else if (a !== b) report('sync', copyPath, 0, 0, `${what} differs from ${sourcePath}: copy it again`);
   }
-  const source = byPath.get('org/rendering/claude-ai.md');
-  const json = byPath.get('org/rendering/claude-code-managed-settings.json');
-  if (typeof source !== 'string' || typeof json !== 'string') {
-    report('sync', 'org/rendering', 0, 0, 'claude-ai.md and claude-code-managed-settings.json must both exist');
+}
+
+// `claudeMd` loads in every Claude Code session of the organisation, engineers' included, next to the
+// Indeck server instructions. It is its own short text, not a copy of the org block.
+function checkManagedSettings(files) {
+  const json = files.find((f) => f.path === MANAGED_SETTINGS)?.text;
+  if (typeof json !== 'string') {
+    report('budgets', MANAGED_SETTINGS, 0, 0, 'missing (it has a budget)');
     return;
   }
-  const start = source.indexOf(BEGIN);
-  const stop = source.indexOf(END);
-  if (start === -1 || stop < start) return; // checkBudgets already reports the markers
-  const block = source.slice(start + BEGIN.length, stop).trim();
   let claudeMd;
   try {
     claudeMd = JSON.parse(json).claudeMd;
   } catch (error) {
-    report('sync', 'org/rendering/claude-code-managed-settings.json', 0, 0, `invalid JSON: ${error.message}`);
+    report('budgets', MANAGED_SETTINGS, 0, 0, `invalid JSON: ${error.message}`);
     return;
   }
-  if (typeof claudeMd !== 'string' || claudeMd.trim() !== block) {
-    report('sync', 'org/rendering/claude-code-managed-settings.json', 0, 0,
-      'claudeMd differs from the block in org/rendering/claude-ai.md: copy the block again');
+  if (typeof claudeMd !== 'string') report('budgets', MANAGED_SETTINGS, 0, 0, 'claudeMd must be a string');
+  else if ([...claudeMd].length > CLAUDE_MD_CHARS) {
+    report('budgets', MANAGED_SETTINGS, 0, 0, `claudeMd has ${[...claudeMd].length} characters, budget ${CLAUDE_MD_CHARS}`);
   }
 }
 
@@ -206,6 +207,7 @@ try {
   process.exit(2);
 }
 checkBudgets(files);
+checkManagedSettings(files);
 checkSync(files);
 checkLinks(files);
 

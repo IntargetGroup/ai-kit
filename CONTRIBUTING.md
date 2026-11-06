@@ -44,7 +44,7 @@ Node 22 or newer, no install step:
 node scripts/check.mjs
 ```
 
-It checks only exact things: page budgets, the instruction blocks' length, the intentional copies (org instructions and `claudeMd`, the folder template, the setup prompt) and links to files in this repository. A failure is always real. CI runs the same script and a secret scan of the full history ([gitleaks](https://github.com/gitleaks/gitleaks)).
+It checks only exact things: page budgets, the instruction blocks' length, the size of `claudeMd`, the intentional copies (the folder template, the setup prompt) and links to files in this repository. A failure is always real. CI runs the same script and a secret scan of the full history ([gitleaks](https://github.com/gitleaks/gitleaks)).
 
 ## Open the pull request
 
