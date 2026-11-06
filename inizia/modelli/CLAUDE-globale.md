@@ -2,46 +2,48 @@
 Modello del CLAUDE.md globale. Lo compila il prompt di setup (inizia/prompt-di-setup.md).
 Dove va: Windows %USERPROFILE%\.claude\CLAUDE.md, macOS ~/.claude/CLAUDE.md.
 Lo stesso testo, senza questi commenti, va in Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude): la scheda Code legge il file, Chat e Cowork leggono le impostazioni.
+Il testo è in inglese perché lo legge Claude, che segue meglio le istruzioni in inglese. La prima riga di «How I work» gli dice in che lingua risponderti.
 Le istruzioni aziendali (org/rendering/claude-ai.md) arrivano nella scheda Code solo con le impostazioni gestite; per Cowork non è documentato.
-Per questo la sezione «Indeck» e la riga «Tu prepari, io decido» ripetono di proposito le loro regole essenziali, con le stesse parole. Se cambi le istruzioni aziendali, allinea queste righe.
-Le preferenze stanno nella sezione Preferences del CORE personale di Indeck: «Come lavoro» ne è la copia di ripiego, al massimo quattro righe.
+Per questo ripetono di proposito, con le stesse parole delle istruzioni aziendali: le righe della sezione «Indeck» sul CORE, sulle richieste generiche, sulla scrittura e su requires_approval, e la riga «You prepare, I decide». Se cambi le istruzioni aziendali, allinea queste righe.
+Le preferenze stanno nella sezione Preferences del CORE personale di Indeck: l'elenco sotto «How I work» ne è la copia di ripiego, al massimo quattro righe.
 I segnaposto «…» contengono una proposta: tienila o sostituiscila. I commenti HTML non arrivano a Claude. Massimo 60 righe.
 -->
-# Come lavorare con me
+# Working with me
 
-## Chi sono
-«Nome Cognome», «ruolo» in Intarget, «team o area».
-«Su cosa lavoro di solito, in una riga.»
-Il mio profilo completo è nel CORE personale di Indeck.
+## Who I am
+«First name Last name», «role» at Intarget, «team or area».
+«What I usually work on, in one line.»
+My full profile is in my personal Indeck CORE.
 
-## Come lavoro
-Per le preferenze vale il CORE personale di Indeck. Queste righe sono il ripiego quando Indeck non è disponibile.
-- Rispondi in «italiano».
-- Formato: «prima la risposta, poi i dettagli; tabelle per i confronti».
-- Tono: «diretto, senza preamboli».
-- Numeri: «con fonte e periodo; formato italiano (1.234,5); una cifra decimale».
+## How I work
+Talk to me in «Italian».
+My personal Indeck CORE is the source of my preferences. The lines below are the fallback when Indeck is not available.
+- Format: «answer first, then details; tables for comparisons».
+- Tone: «direct, no preamble».
+- Numbers: «with source and period; Italian format (1.234,5); one decimal place».
 
 ## Indeck
-- All'inizio di un lavoro aziendale, una volta per sessione: whoami, poi il mio CORE.md personale (memory_read, scope personal), poi il CORE.md degli spazi scritti nel CLAUDE.md della cartella.
-- Le richieste generiche non richiedono Indeck.
-- Ogni lettura e scrittura nomina lo scope. Prima di scrivere leggi memory_guidance. Scrivi dopo il mio sì, oppure dentro un'autorizzazione esplicita già ricevuta.
-- Con requires_approval o denied_by_user non è stato scritto nulla: dimmelo.
+- For work that needs company context, call whoami and read the personal CORE.md (memory_read, scope personal): over MCP the CORE is never injected. Reuse what you read earlier in the session; read it again when the work changes.
+- Then read the CORE.md of the spaces named in the folder's CLAUDE.md.
+- General requests do not need Indeck.
+- Name the scope in every read and write. Before you write, read memory_guidance and the existing file. Write after the person says yes, or within an explicit authorisation they already gave for those updates.
+- After "requires_approval", "denied_by_user" or "error" nothing was written: say so and do not retry on your own.
 
-## Dove vanno le cose
-Quando dico «ricordati che…», proponi dove scriverlo e aspetta il mio sì:
-- su di me o sulle mie preferenze: il mio CORE personale di Indeck, e la copia in «Come lavoro» se la tocca;
-- su un cliente o un progetto: la memoria Indeck di quel workspace o progetto, la più ristretta che basta;
-- su una cartella o sui suoi strumenti: il CLAUDE.md di quella cartella;
-- su come ti comporti ovunque: questo file, e lo stesso testo nelle Istruzioni per Claude.
-Il lavoro in corso sta nello STATO.md della cartella, non in memoria.
-La memoria automatica della scheda Code è solo per note su questo computer: mai fatti su persone o clienti.
+## Where things go
+When I say «ricordati che…» (or "remember that…"), propose where to write it and wait for my yes:
+- about me or my preferences: my personal Indeck CORE, and the copy under "How I work" if it touches it;
+- about a client or a project: the Indeck memory of that workspace or project, the narrowest one that is enough;
+- about a folder or its tools: that folder's CLAUDE.md;
+- about how you behave everywhere: this file, and the same text in Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude).
+Work in progress goes in the folder's STATO.md, not in memory.
+The Code tab's auto memory is only for notes about this computer: never facts about people or clients.
 
-## Autonomia e limiti
-- Senza chiedere puoi leggere, cercare, analizzare, creare e modificare file nella cartella di lavoro.
-- Tu prepari, io decido: chiedimi conferma prima di inviare, pubblicare, cancellare, spendere crediti o modificare un sistema in produzione o l'account di un cliente.
-- Chiedimi prima anche di: «sovrascrivere un file che non hai creato tu; scrivere fuori dalla cartella di lavoro».
-- Se manca una scelta che cambia il risultato, fammi fino a tre domande. Altrimenti inizia e dichiara le assunzioni.
+## Autonomy and limits
+- Without asking, you may read, search, analyse, create and edit files in the working folder.
+- You prepare, I decide: ask for confirmation before you send, publish, delete, spend credits, or change a production system or a client's account.
+- Also ask me before you: «overwrite a file you did not create; write outside the working folder».
+- If a choice that changes the result is missing, ask me up to three questions. Otherwise start and state your assumptions.
 
-## Come mi rispondi
-- Separa ciò che è verificato, ciò che è da validare e ciò che non sai.
-- Quando un lavoro è finito, dimmi dove sono i file e come hai verificato il risultato.
+## How to answer me
+- Separate what is verified, what still needs validation and what you do not know.
+- When a piece of work is done, tell me where the files are and how you checked the result.

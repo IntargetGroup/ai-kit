@@ -1,15 +1,15 @@
-# Stato del lavoro
+# Work status
 
-<!-- Claude riscrive questo file quando dici «chiudiamo». Contiene solo lo stato di oggi: la storia non serve. Massimo 40 righe. La data cambia solo insieme al contenuto. -->
+<!-- Claude riscrive questo file quando dici «chiudiamo» e lo legge all'inizio di ogni sessione. È in inglese perché lo legge Claude. Contiene solo lo stato di oggi: la storia non serve. Massimo 40 righe. La data cambia solo insieme al contenuto. -->
 
-## In corso
-- «Lavoro» (`lavori/«AAAA-MM-argomento»/`): «a che punto è». Se non c'è niente: «Nessun lavoro avviato».
+## In progress
+- «Work» (`lavori/«YYYY-MM-topic»/`): «where it stands». If there is nothing: «No work started».
 
-## Prossimi passi
-- «Prossima azione concreta».
+## Next steps
+- «Next concrete action».
 
-## Bloccato da
-- «Cosa manca, e chi o cosa lo deve dare». Se non c'è niente: «Nessun blocco noto».
+## Blocked by
+- «What is missing, and who or what must provide it». If there is nothing: «No known blockers».
 
-## Ultimo aggiornamento
-«AAAA-MM-GG»
+## Last updated
+«YYYY-MM-DD»

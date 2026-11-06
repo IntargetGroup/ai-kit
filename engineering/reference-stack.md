@@ -1,8 +1,8 @@
 # Reference stack
 
-**Checked: 2026-11-05.** This page records choices and the reasons for them. Version numbers belong to the project that installs them: run `npm view <pkg> version` at install time and pin the current release. A major version appears below only when the choice depends on it. Node status: [Node.js release schedule](https://github.com/nodejs/Release/blob/main/schedule.json).
+**Checked: 2026-11-06.** This page records choices and the reasons for them. Version numbers belong to the project that installs them: run `npm view <pkg> version` at install time and pin the current release. A major version appears below only when the choice depends on it. Node status: [Node.js release schedule](https://github.com/nodejs/Release/blob/main/schedule.json).
 
-This is the default for new TypeScript web and AI products. It is not a mandate. When you deviate for a reason, write an ADR ([repo-harness.md](repo-harness.md#decisions)).
+This is the default for new TypeScript web and AI products. It is not a mandate. When you deviate for a reason, write an ADR ([knowledge-management-spec.md §6](knowledge-management-spec.md#6-decisions-adrs)).
 
 ## Runtime and framework
 
@@ -21,7 +21,7 @@ This is the default for new TypeScript web and AI products. It is not a mandate.
 | Lint | ESLint 10+, flat config | **ESLint 9 reached end of life on 2026-08-06** ([endoflife.date](https://endoflife.date/eslint)). Migrate. `eslint-config-next` tracks the Next.js version. |
 | Validation | Zod | Parse untrusted input once at each boundary; derive static types from the same schema (`z.infer`). |
 | Validation, hot paths | ArkType | When parse speed matters. Same rule: one schema, types derived from it. |
-| Tests | Vitest | Requires Node `^22.12`, `^24` or `>=26`. Static-markup tests do not prove interaction; test interaction in a real browser (Playwright). |
+| Tests | Vitest | Requires Node `^22.12`, `^24` or `>=26`. Tests live next to the code they test. Static-markup tests do not prove interaction; test interaction in a real browser (Playwright). |
 | CI | GitHub Actions | Run typecheck, lint, tests and the docs/agent-context checks on every PR. |
 
 ## UI
@@ -29,8 +29,8 @@ This is the default for new TypeScript web and AI products. It is not a mandate.
 | Layer | Choice | Notes |
 |---|---|---|
 | Styling | Tailwind CSS 4 | CSS-first configuration (`@import "tailwindcss"`, `@theme`); no `tailwind.config.js` for new projects. |
-| Primitives | Radix + shadcn/ui, or React Aria Components | Own the components in the repo; brand them. React Aria when accessibility behaviour is the hard part. |
-| Motion | Motion | Package `motion`, import from `motion/react` ([docs](https://motion.dev/docs/react)). Animate on interaction; avoid continuously repainting animations. |
+| Primitives | Radix + shadcn/ui, or React Aria Components | Own the components in the repo and brand them: variants with `class-variance-authority`, class merging with `tailwind-merge`. React Aria when accessibility behaviour is the hard part. |
+| Motion | Motion | Package `motion`, import from `motion/react` ([docs](https://motion.dev/docs/react)). `layoutId` inside a `LayoutGroup` for shared-element transitions. Animate on interaction; avoid continuously repainting animations (pulse, shimmer, spinners). |
 | Icons | lucide-react | |
 
 ## State and forms
@@ -38,8 +38,8 @@ This is the default for new TypeScript web and AI products. It is not a mandate.
 | Layer | Choice | Notes |
 |---|---|---|
 | Server state | TanStack Query | The one cache for server data. |
-| Transient UI state | Zustand | Only UI state that is not server truth. Never hold the same truth in both stores. |
-| Forms | react-hook-form + `@hookform/resolvers` | Standard Schema resolvers take Zod or ArkType schemas directly. |
+| Transient UI state | Zustand | Only UI state that is not server truth. Never hold the same truth in both stores ([patterns.md](patterns.md#6-one-server-state-cache)). Use `persist` with `partialize` for the few fields that must survive a reload. |
+| Forms | react-hook-form 7 + `@hookform/resolvers` | Standard Schema resolvers take Zod or ArkType schemas directly. Version 8 is in beta (2026-11-06); stay on 7. |
 | Tables | TanStack Table | Version 9 changed the API. Coming from 8, read the migration notes first. |
 
 ## AI layer
@@ -48,6 +48,7 @@ This is the default for new TypeScript web and AI products. It is not a mandate.
 |---|---|---|
 | Model SDK | Vercel AI SDK (`ai`) 7 | Provider-agnostic. Node 22+ and ESM only. v7 renamed core options; the names and the loop pattern are in [tool-orchestration.md §5](tool-orchestration.md#5-vercel-ai-sdk-v7), the full list in the [migration guide](https://ai-sdk.dev/docs/migration-guides/migration-guide-7-0). Migrate deprecated aliases (`system`, `onFinish`, `needsApproval`) while the diff is small. |
 | Providers | `@ai-sdk/anthropic`, `@ai-sdk/openai`, `@ai-sdk/google` | One provider package per vendor. |
+| Provider SDK, direct | the vendor's own SDK | Only for a feature the AI SDK does not expose yet. Call it behind a provider wrapper that records request and response ([patterns.md](patterns.md#9-provider-wrapper-with-an-io-ledger)). |
 | UI hooks | `@ai-sdk/react` | `useChat` over typed message parts. |
 | MCP client | `@ai-sdk/mcp` | `createMCPClient` with HTTP transport for remote servers; close the client when done. |
 | Telemetry | `@ai-sdk/otel` | OpenTelemetry moved out of core in v7. |
@@ -58,11 +59,22 @@ Model choice: keep model ids in one config module, never scattered string litera
 
 ### Which agent SDK
 
-| SDK | Pick it for |
-|---|---|
-| Vercel AI SDK | web apps, streaming UIs, provider-agnostic products; the default |
-| Claude Agent SDK (`@anthropic-ai/claude-agent-sdk`) | long-running agents built on Claude Code's harness: tools, permissions, hooks, subagents |
-| Google ADK | products that live in the Google Cloud ecosystem |
+| SDK | Pick it for | Trade-off |
+|---|---|---|
+| Vercel AI SDK | web apps, streaming UIs, provider-agnostic products; the default | you build the agent harness (permissions, memory, subagents) yourself |
+| Claude Agent SDK (`@anthropic-ai/claude-agent-sdk`) | long-running agents built on Claude Code's harness: tools, permissions, hooks, subagents | Claude only |
+| Google ADK | products that live in the Google Cloud ecosystem | most of its value comes from Google Cloud deployment and managed services |
+
+Per-SDK details and foot-guns: [tool-orchestration.md §7](tool-orchestration.md#72-which-framework).
+
+### External AI services
+
+Optional. Pick per project, and only after you check the vendor's data terms and [../guide/fonti.md](../guide/fonti.md). Send no client or personal data to a service the organisation has not approved.
+
+| Need | Option | Notes |
+|---|---|---|
+| Image and video generation | fal.ai | One API across many generation models. Model names change monthly; keep them in config. |
+| Web search, extraction and crawl for agents | Tavily | Store each request and response through the provider wrapper, so results are replayable and citable. |
 
 ## Data
 
@@ -70,8 +82,8 @@ Model choice: keep model ids in one config module, never scattered string litera
 |---|---|---|
 | Database | Supabase Postgres | Postgres plus Auth, Storage, Realtime. |
 | Client | `@supabase/supabase-js`, `@supabase/ssr` | `@supabase/server` ("server-side utilities for Supabase") is worth evaluating for new server code; no urgency. |
-| ORM | Drizzle | Keep the ORM inside repository modules. Domain code never imports it. |
-| Migrations | hand-authored SQL, committed | Write and review every migration. Never let the ORM generate and forget. Every schema change goes through a migration. |
+| ORM | Drizzle | Keep the ORM inside repository modules; domain code never imports it ([patterns.md](patterns.md#1-repository-boundary)). `drizzle-kit` may suggest a diff and runs Studio; it does not author the migration that ships. |
+| Migrations | hand-authored SQL, committed | Write and review every migration ([patterns.md](patterns.md#4-hand-authored-migrations)). Every schema change goes through a migration. |
 
 **Row Level Security.** RLS is the authorization layer for every request that reaches Postgres through the Data API with a user token. Enable RLS on every table in an exposed schema: "A table in an exposed schema without RLS is readable and writable by any role with a grant on it" ([Supabase docs](https://supabase.com/docs/guides/database/postgres/row-level-security)). A secret key (or the legacy `service_role` key) bypasses RLS when the request carries no user token, and direct Postgres connections run as whatever role they log in as. Server code on those paths must enforce authorization itself. Decide per app which path carries authorization, write it in an ADR, and test both the allowed and the denied case.
 
@@ -79,11 +91,11 @@ Model choice: keep model ids in one config module, never scattered string litera
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Durable workflows | Inngest | Slow or retriable work runs as durable, event-driven functions with retries and a per-tenant concurrency key. Use the repo's existing runner if it has one. |
+| Durable workflows | Inngest | Slow or retriable work runs as durable, event-driven functions with retries and a per-tenant concurrency key ([patterns.md](patterns.md#8-durable-background-work)). Use the repo's existing runner if it has one. |
 
 ## Auth
 
-Use a managed provider (Supabase Auth, Clerk) or Better Auth when you self-host. Check authorization in every route handler and Server Function, not only in `proxy.ts`: a matcher change can silently remove proxy coverage ([Next.js docs](https://nextjs.org/docs/app/api-reference/file-conventions/proxy#execution-order)).
+Use a managed provider (Supabase Auth, Clerk) or Better Auth when you self-host. Check authorization in every route handler and Server Function, not only in `proxy.ts`: a matcher change can silently remove proxy coverage ([Next.js docs](https://nextjs.org/docs/app/api-reference/file-conventions/proxy#execution-order)). For an internal tool, restrict sign-in to the company domain plus an allow-list, and enforce it in the sign-in callback as well as in the proxy ([patterns.md](patterns.md#11-layered-authorization)).
 
 ## Hosting and observability
 
@@ -91,6 +103,6 @@ Use a managed provider (Supabase Auth, Clerk) or Better Auth when you self-host.
 |---|---|---|
 | Web | Vercel | Preview deployment per PR. |
 | Long-running services | Google Cloud Run | For work that does not fit a serverless function. Name one deployment target per repo. |
-| Telemetry | OpenTelemetry | `@vercel/otel` for Next.js; register it only for the runtimes that support it. Structured logs with a request id; never log secrets or prompts with personal data. |
+| Telemetry | OpenTelemetry | `@vercel/otel` for Next.js; register per runtime ([patterns.md](patterns.md#12-runtime-aware-telemetry)). Register the AI SDK integration for model and tool-call spans. Structured logs with a request id; never log secrets or prompts with personal data. |
 
 To refresh this file, have Claude read the release notes of each choice above and update the notes and the date in one PR. Change a choice only with an ADR.

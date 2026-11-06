@@ -19,6 +19,7 @@ Il kit sistema tre cose:
 → **[inizia/README.md](inizia/README.md)**: configurazione nell'app desktop, Windows e macOS, con una verifica dopo ogni passo.
 
 Se vuoi capire prima il perché: [guide/perche.md](guide/perche.md), una pagina.
+In 20 slide, da proiettare o da girare a un collega: [guide/presentazione.pdf](guide/presentazione.pdf).
 
 ## Per chi
 
@@ -38,9 +39,13 @@ Se vuoi capire prima il perché: [guide/perche.md](guide/perche.md), una pagina.
 | [`guide/`](guide/) | [perché](guide/perche.md) · [memoria](guide/memoria.md) · [Indeck](guide/indeck.md) · [chiedere in grande](guide/chiedere-in-grande.md) · [fonti](guide/fonti.md) · [Chat, Cowork e Code](guide/app-desktop.md) |
 | [`kit/primo-workspace/`](kit/primo-workspace/LEGGIMI.md) | una cartella di lavoro pronta da copiare |
 | [`org/`](org/README.md) | le istruzioni aziendali per claude.ai e Claude Code, e come pubblicarle |
-| [`secondo-cervello/`](secondo-cervello/README.md) | la versione leggera (una cartella + Indeck) e quella completa con Obsidian |
-| [`engineering/`](engineering/README.md) | per i repository di codice: AGENTS.md, controlli, stack di riferimento (in inglese) |
+| [`secondo-cervello/`](secondo-cervello/README.md) | la versione leggera (una cartella + Indeck) e quella completa, facoltativa: un vault con git compilato da Claude, Obsidian come vista, con la specifica che Claude esegue |
+| [`engineering/`](engineering/README.md) | per i repository di codice: AGENTS.md, la specifica della memoria per agenti, stack e pattern di riferimento, orchestrazione di strumenti e modelli, skill (in inglese) |
 | [`risorse.md`](risorse.md) | persone da seguire, strumenti, documentazione ufficiale |
+
+## Perché i modelli e i prompt sono in inglese
+
+I testi che Claude legge come istruzioni (i modelli dei CLAUDE.md, i prompt da incollare, le istruzioni aziendali, le specifiche) sono in inglese: i modelli seguono meglio le istruzioni in inglese. Claude ti risponde comunque in italiano. Le pagine per le persone sono in italiano.
 
 ## Cosa non c'è, di proposito
 

@@ -17,7 +17,7 @@ Una cartella serve un solo workspace o progetto Indeck.
 **Inizio.** Apri la cartella nella scheda Code o in Cowork ([quale scegliere](../guide/app-desktop.md)).
 
 - Nella scheda Code Claude carica da solo il CLAUDE.md globale e quello della cartella. Per controllarlo scrivi `/context`. Se l'elenco dei file non compare, chiedi: «Quali file di istruzioni hai caricato in questa sessione?».
-- In Cowork valgono le tue istruzioni personali, in Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude), e la riga nelle istruzioni della cartella: «All'inizio di ogni attività leggi CLAUDE.md e STATO.md in questa cartella e seguili.»
+- In Cowork valgono le tue istruzioni personali, in Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude), e la riga nelle istruzioni della cartella: «At the start of every task, read CLAUDE.md and STATO.md in this folder and follow them.»
 
 Poi Claude chiama `whoami`, legge il tuo CORE personale e il CORE degli spazi Indeck indicati nel CLAUDE.md della cartella, e legge `STATO.md`. Tu scrivi cosa vuoi ottenere e come capire che è fatto ([come chiedere](../guide/chiedere-in-grande.md)).
 

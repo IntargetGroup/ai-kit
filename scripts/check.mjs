@@ -30,6 +30,11 @@ const BUDGETS = {
   'kit/primo-workspace/CLAUDE.md': { lines: 80 },
   'org/rendering/claude-ai.md': { chars: 3000 },
   'org/rendering/indeck-mcp-server-instructions.md': { chars: 2000 },
+  // Agent-facing specs: Claude reads them on demand, not every session. About 15% headroom, so growth is a reviewed change.
+  'secondo-cervello/obsidian/SPEC.md': { lines: 650 },
+  'engineering/knowledge-management-spec.md': { lines: 500 },
+  // One page so its anti-pattern index covers every pattern.
+  'engineering/patterns.md': { lines: 520 },
 };
 const DEFAULT_MD_LINES = 250;
 const UNBUDGETED = new Set(['CHANGELOG.md']);

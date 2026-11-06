@@ -4,6 +4,8 @@ Un prompt da incollare in una chat già fatta (claude.ai, ChatGPT, Gemini, Noteb
 
 Il risultato è una **cattura derivata**: un testo che il modello scrive sulla conversazione. Non è una trascrizione e non è un'esportazione fedele. Il prompt chiede al modello di dichiarare cosa vede e cosa manca, così chi lo legge sa quanto fidarsi.
 
+Il prompt è in inglese perché i modelli seguono meglio istruzioni in inglese. La cattura resta nella lingua della conversazione: titoli delle sezioni in inglese, contenuto e citazioni nella lingua originale.
+
 ## Quando usarlo
 
 - Una conversazione lunga ha prodotto decisioni, ragionamenti o numeri che vuoi ritrovare.
@@ -14,114 +16,122 @@ Se la conversazione riguarda un cliente, la cattura va solo nel progetto o nel w
 
 ## Come si usa
 
-1. Apri la conversazione. Usa solo l'account aziendale.
-2. Copia il blocco tra `===== INIZIO PROMPT =====` e `===== FINE PROMPT =====` e incollalo come messaggio successivo.
+1. Apri la conversazione. Usa solo l'account aziendale. Se la piattaforma carica i messaggi vecchi solo scorrendo, scorri fino all'inizio.
+2. Copia il blocco tra `===== BEGIN PROMPT =====` e `===== END PROMPT =====` e incollalo come messaggio successivo.
 3. Copia la risposta in un file `.md`. Nome: `<piattaforma>-<argomento>-AAAA-MM-GG.md`. Nella variante leggera mettilo in `input\` della tua cartella di lavoro.
-4. Confronta tre affermazioni con la conversazione originale. Controlla anche la sezione "Limiti della cattura". Se trovi un'invenzione, rifai (vedi "Se qualcosa va storto").
+4. Confronta tre affermazioni con la conversazione originale. Controlla anche la sezione "Capture limits". Se trovi un'invenzione, rifai (vedi "Se qualcosa va storto").
 5. Portalo dove serve:
    - **Indeck:** in Claude, con l'MCP di Indeck collegato con accesso in scrittura ([livelli di accesso](../guide/indeck.md#lettura-o-scrittura)), chiedi: "Ingerisci `input/<file>.md` nel progetto «nome» di Indeck con la skill Ingestione in memoria Indeck". Claude propone cosa scrivere e scrive dopo il tuo sì.
-   - **Vault completo:** mettilo in `inbox/` ed esegui `/ingest inbox/`.
+   - **Vault completo:** mettilo in `inbox/` ed esegui `/ingest` ([completo.md](completo.md)).
 
 Se la piattaforma offre un'esportazione ufficiale dei dati, conserva anche quella accanto alla cattura: è la fonte, la cattura è un riassunto.
 
 ## Il prompt
 
 ```text
-===== INIZIO PROMPT =====
+===== BEGIN PROMPT =====
 
-Scrivi una cattura di questa conversazione (o, se questo è un notebook di NotebookLM, della conoscenza sintetizzata nel notebook e delle sue fonti) in un unico documento Markdown. Il documento entrerà in una memoria di lungo periodo e un altro sistema lo elaborerà: il formato qui sotto è un contratto. Seguilo.
+Write a capture of this conversation (or, if this is a NotebookLM notebook, of the knowledge the notebook synthesised and of its sources) as one Markdown document. The document goes into a long-term memory and another system will process it, so the format below is a contract. Follow it exactly.
 
-## Regole
+## Rules
 
-1. Conserva il dettaglio. Questa cattura serve a ricostruire decisioni e ragionamenti, non a riassumere. La lunghezza è proporzionata alla conversazione: tutto ciò che serve a ricostruire una decisione, nessun riempitivo. Una decisione, un numero, un nome, una motivazione o un'alternativa scartata che manca è un errore.
-2. Non inventare. Se una sezione non ha materiale, scrivi _(niente in questa conversazione)_. Se non sei sicuro che una cosa sia stata detta, scrivi _(implicito, non detto: …)_ invece di affermarla.
-3. Attribuisci ogni affermazione: [utente] per ciò che ha detto l'utente, [assistente] per ciò che hai detto tu, [fonte: titolo o URL] per un documento o un link citato nella conversazione.
-4. Copia numeri e nomi esattamente come compaiono: cifre, percentuali, date, importi, nomi di persone, aziende, prodotti, identificativi. Non arrotondare, non tradurre, non normalizzare.
-5. Dichiara cosa vedi. Riporta le prime dieci parole del primo messaggio che vedi e dell'ultimo. Indica allegati, immagini o file che non hai potuto leggere.
-6. Non trascrivere password, chiavi, token, dati sanitari o giudizi su persone. Al loro posto scrivi [rimosso per privacy].
-7. Rispondi con il solo documento. Nessuna frase prima o dopo. Il documento inizia con --- e finisce con l'ultima riga di contenuto.
+1. Keep the detail. The capture must let a reader rebuild decisions and reasoning; it is not a summary. Length follows the conversation: everything needed to rebuild a decision, no filler. A missing decision, number, name, reason or rejected alternative is an error.
+2. Do not invent. If a section has no material, write _(none in this conversation)_. If you are not sure something was said, write _(implied, not stated: …)_ instead of asserting it.
+3. Attribute every claim: [user] for what the user said, [assistant] for what you said, [source: title or URL] for a document or link cited in the conversation.
+4. Copy numbers and names exactly as they appear: figures, percentages, dates, amounts, names of people, companies and products, identifiers. Do not round, translate or normalise.
+5. Language: keep the section headings and frontmatter keys below in English. Write all other content in the language of the conversation. Quote passages verbatim in their original language; never translate a quotation.
+6. State what you can see. Give the first ten words of the first message you can see and of the last one. List attachments, images or files you could not read.
+7. Do not copy passwords, keys, tokens, health data or judgments about people. Write [removed for privacy: <kind>] in their place, for example [removed for privacy: health].
+8. Reply with the document only. No sentence before or after it. The document starts with --- and ends with its last line of content.
 
-## Formato
+## Format
 
 ---
-tipo: cattura-conversazione
-piattaforma: <claude.ai | chatgpt | gemini | notebooklm | altro>
-titolo: "<titolo della conversazione, o un titolo descrittivo di massimo 80 caratteri>"
-link: "<link permanente se la piattaforma lo mostra, altrimenti vuoto>"
-periodo: "AAAA-MM-GG / AAAA-MM-GG"
-catturato_il: "AAAA-MM-GG"
-generato_da: "<nome del modello, se lo conosci>"
+type: conversation-capture
+platform: <claude.ai | chatgpt | gemini | notebooklm | other>
+title: "<the conversation's title, or a descriptive title of at most 80 characters>"
+link: "<permalink if the platform shows one, otherwise empty>"
+period: "YYYY-MM-DD / YYYY-MM-DD"
+captured_on: "YYYY-MM-DD"
+language: "<language of the conversation>"
+generated_by: "<your model name, if you know it>"
 ---
 
-# <titolo>
+# <title>
 
-> Cattura generata da un modello a partire dalla conversazione. Non è una trascrizione. Verifica sui messaggi originali prima di citarla.
+> Capture generated by a model from the conversation. It is not a transcript. Check the original messages before you cite it.
 
-## Sintesi
-Da due a quattro paragrafi: cosa si cercava di capire, come si è evoluta la conversazione, a cosa si è arrivati o perché non si è arrivati.
+## Summary
+Two to four paragraphs: what the conversation tried to work out, how it evolved, what it reached or why it did not.
 
-## Affermazioni chiave
-- Un'affermazione per riga, comprensibile da sola, con attribuzione. [utente]
+## Key claims
+- One claim per line, understandable on its own, with attribution. [user]
 
-## Decisioni
-- **Decisione:** … **Motivo:** … **Alternative considerate:** … (oppure _(nessuna indicata)_) [utente]
+## Decisions
+- **Decision:** … **Reason:** … **Alternatives considered:** … (or _(none stated)_) [user]
 
-## Azioni
-- [ ] Azione. [responsabile: come indicato nella conversazione, oppure "non indicato"] [entro: come indicato, oppure "non indicato"]
+## Action items
+- [ ] Action. [owner: as stated in the conversation, or "not stated"] [due: as stated, or "not stated"]
 
-## Domande aperte
-- Domande poste e non risolte.
+## Open questions
+- Questions raised and not resolved.
 
-## Entità citate
-- <nome>: <tipo>, <contesto in una riga>
+## Entities
+- <name>: <kind>, <context in one line>
 
-## Concetti
-- **<concetto>:** definizione o distinzione emersa, in una riga.
+## Concepts
+- **<concept>:** a definition or distinction that emerged, in one line.
 
-## Citazioni testuali
-Da zero a cinque passaggi in cui la formulazione porta il ragionamento. Ognuno con una riga di contesto e l'attribuzione.
+## Verbatim quotes
+Zero to five passages where the wording carries the reasoning. Each with one line of context and its attribution.
 
-## Contraddizioni
-- Affermazioni in conflitto tra loro o con fonti citate, con le due fonti.
+## Contradictions
+- Claims that conflict with each other or with cited sources, with both sources.
 
-## Prossimi passi
-- Cosa la conversazione indica come seguito, anche se non è un impegno preciso.
+## Next steps
+- What the conversation points to as follow-up, even if it is not a firm commitment.
 
-## Limiti della cattura
-- Primo messaggio visibile: "<prime dieci parole>"
-- Ultimo messaggio visibile: "<prime dieci parole>"
-- Parti, allegati o file non letti: …
-- Passaggi ricostruiti con incertezza: …
+## Capture limits
+- First visible message: "<first ten words>"
+- Last visible message: "<first ten words>"
+- Parts, attachments or files not read: …
+- Passages rebuilt with uncertainty: …
 
-## Trascrizione (solo se la conversazione ha al massimo 20 scambi)
-### Scambio N [utente | assistente]
-Testo del messaggio.
+## Transcript (only if the conversation has at most 20 exchanges)
+### Exchange N [user | assistant]
+Message text.
 
-Per NotebookLM, sostituisci "Trascrizione" con:
+For a NotebookLM notebook, replace "Transcript" with:
 
-## Fonti del notebook
-- <titolo>: <tipo>, <URL o "file locale">, <cosa apporta in una riga>
+## Notebook sources
+- <title>: <kind>, <URL or "local file">, <what it contributes, in one line>
 
-## Sintesi del notebook
-Le risposte o i briefing generati dal notebook che vale la pena conservare, ognuno con le fonti che lo sostengono.
+## Notebook syntheses
+The answers or briefings the notebook generated that are worth keeping, each with the sources that support it.
 
-## Controlli prima di rispondere
-- Numeri e nomi sono identici all'originale?
-- Ogni affermazione ha un'attribuzione?
-- C'è qualcosa che non era nella conversazione? Se sì, toglilo.
-- La sezione "Limiti della cattura" è compilata?
-- La risposta è solo il documento?
+If the conversation used project files or memory, list in "Capture limits" the project files you know of. Capture only what came up in the conversation, not the whole memory or every file.
 
-===== FINE PROMPT =====
+## Checks before you reply
+- Are numbers and names identical to the original?
+- Does every claim have an attribution?
+- Is there anything that was not in the conversation? If so, remove it.
+- Are quotations in their original language, untranslated?
+- Is "Capture limits" filled in?
+- Is the reply the document only?
+
+===== END PROMPT =====
 ```
 
 ## Se qualcosa va storto
 
-| Sintomo | Cosa scrivere nella stessa chat |
+Scrivi la correzione nella stessa chat. È in inglese, come il prompt.
+
+| Sintomo | Cosa scrivere |
 |---|---|
-| La cattura è troppo corta per la conversazione | "La cattura è troppo compressa. Conserva entità, numeri, motivazioni e alternative. Rifalla." |
-| Contiene cose mai dette | "La sezione «…» contiene contenuti inventati. Rifalla attenendoti solo alla conversazione." |
-| Mancano le attribuzioni | "Ogni affermazione ha bisogno di [utente], [assistente] o [fonte: …]. Rifalla." |
+| La cattura è troppo corta per la conversazione | `The capture is too compressed. Keep entities, numbers, reasons and alternatives. Redo it.` |
+| Contiene cose mai dette | `The section "…" contains content that was not in the conversation. Redo it using only the conversation.` |
+| Mancano le attribuzioni | `Every claim needs [user], [assistant] or [source: …]. Redo it.` |
+| Le citazioni sono tradotte | `Quotations must stay in their original language. Redo the "Verbatim quotes" section.` |
 | Il primo messaggio visibile non è il primo della conversazione | Il modello non vede tutto. Cattura la conversazione a parti, oppure parti dall'esportazione ufficiale. |
 | Frasi prima o dopo il documento | Cancellale a mano. |
 

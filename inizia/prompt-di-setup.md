@@ -11,6 +11,8 @@ Con questo prompt Claude si configura da solo. Ci vogliono circa 10 minuti. Clau
 
 Claude chiede il tuo sì prima di modificare un file che esiste già, di scrivere fuori dalla cartella e di scrivere in Indeck.
 
+Il prompt è in inglese, come i file che Claude compila (i due CLAUDE.md e `STATO.md`): sono istruzioni per Claude, che le segue meglio in inglese ([perché](../org/istruzioni.md#come-è-scritto)). Claude ti parla in italiano.
+
 ## Come usarlo
 
 Prima completa i passi 1–4 di [inizia/README.md](README.md).
@@ -25,54 +27,54 @@ Dovresti vedere: dopo pochi secondi Claude ti dice nome, email e workspace che v
 Usa la scheda Code. Cowork non può scrivere il CLAUDE.md globale, che sta fuori dalla cartella: lì Claude salta il file e ti dà comunque il testo per le impostazioni.
 
 ```text
-Configura Claude per lavorare con me, collegato a Indeck. Segui i passi in ordine. A ogni passo dimmi in poche righe cosa hai fatto.
-Puoi creare file nuovi in questa cartella senza chiedere. Prima di modificare un file che esiste già, di scrivere fuori da questa cartella o di scrivere in Indeck, mostrami cosa scrivi e dove, e aspetta il mio sì.
-Scarica i file del kit solo dagli indirizzi esatti scritti qui. Non ricostruirli a memoria.
+Set up Claude to work with me, connected to Indeck. Talk to me in Italian. Follow the steps in order. After each step, tell me in a few lines what you did.
+You may create new files in this folder without asking. Before you modify a file that already exists, write outside this folder or write to Indeck, show me what you will write and where, and wait for my yes.
+Download the kit files only from the exact addresses written here. Do not rebuild them from memory. The templates (CLAUDE.md, STATO.md) are in English because they are instructions for Claude: keep them in English when you fill them in.
 
-1. Indeck. Chiama whoami. Dimmi il mio nome, la mia email e i nomi dei workspace che vedo. Per i progetti basta il numero. Se whoami non c'è o non risponde, fermati e dimmi di collegare Indeck (inizia/README.md, passo 2).
+1. Indeck. Call whoami. Tell me my name, my email and the names of the workspaces I can see. For projects, the count is enough. If whoami is missing or does not answer, stop and tell me to connect Indeck (inizia/README.md, step 2).
 
-2. Il mio CORE. Leggi CORE.md nello scope personal con memory_read. Riassumi in cinque righe cosa dice di me. Se la riga «Ultimo aggiornamento» manca o ha più di 30 giorni, dimmelo. Se il CORE è vuoto o la memoria personale è disattivata, dimmelo e continua.
+2. My CORE. Read CORE.md in the personal scope with memory_read. Summarise in five lines what it says about me. If the «Ultimo aggiornamento» line is missing or older than 30 days, tell me. If the CORE is empty or personal memory is turned off, tell me and continue.
 
-3. Le domande. Fammi queste domande in un solo messaggio. Per ognuna proponi una risposta presa dal CORE, quando c'è, così posso solo confermare. Le prime cinque servono al file globale, le ultime due alla cartella.
-   a. In che lingua vuoi le risposte?
-   b. Che formato e che tono preferisci? Per esempio: prima la risposta, poi i dettagli; tabelle per i confronti; diretto.
-   c. Che lavoro fai di solito con Claude?
-   d. Cosa non devo mai fare senza chiederti, oltre a inviare, pubblicare, cancellare e spendere crediti?
-   e. Come vuoi i numeri? Per esempio: fonte, periodo, arrotondamenti, formato.
-   f. A cosa serve questa cartella? Per quale workspace e quale progetto Indeck? Elenca i workspace di whoami. Possono mancare tutti e due: allora la cartella usa solo il mio scope personale.
-   g. Quali sono due o tre lavori tipici di questa cartella, e quando ognuno è finito?
+3. The questions. Ask me these questions in one message. For each one, propose an answer taken from the CORE, when there is one, so that I can just confirm. The first five are for the global file, the last two for the folder.
+   a. In which language do you want answers?
+   b. Which format and tone do you prefer? For example: answer first, then details; tables for comparisons; direct.
+   c. What work do you usually do with Claude?
+   d. What must I never do without asking you, beyond sending, publishing, deleting and spending credits?
+   e. How do you want numbers? For example: source, period, rounding, format.
+   f. What is this folder for? For which Indeck workspace and which project? List the workspaces from whoami. Both can be missing: then the folder uses only my personal scope.
+   g. What are two or three typical pieces of work in this folder, and when is each one done?
 
-4. Il CLAUDE.md globale.
-   - Ricava tu il sistema operativo e la cartella utente. Il file è nella cartella utente, in .claude/CLAUDE.md: su Windows %USERPROFILE%\.claude\CLAUDE.md, su macOS ~/.claude/CLAUDE.md.
-   - Scarica il modello così com'è, senza riassumerlo: https://raw.githubusercontent.com/IntargetGroup/ai-kit/main/inizia/modelli/CLAUDE-globale.md. Se il download fallisce, fermati e dimmi di aprire https://github.com/IntargetGroup/ai-kit/blob/main/inizia/modelli/CLAUDE-globale.md, cliccare «Raw», copiare tutto e incollartelo.
-   - Compila i segnaposto «…» con il CORE e con le risposte da a a e. Togli i commenti <!-- … --> e le righe rimaste senza contenuto. Resta sotto le 60 righe. Non aggiungere regole che il modello non ha.
-   - Se il file esiste già, non sovrascriverlo. Proponimi l'unione: cosa tieni, cosa aggiungi, cosa togli perché ripete il CORE o il modello. Scrivi dopo il mio sì.
-   - Se non puoi scrivere fuori da questa cartella, come succede in Cowork, non scrivere il file. Dimmi che serve solo alla scheda Code e che lo creeremo da lì.
+4. The global CLAUDE.md.
+   - Work out the operating system and the user folder yourself. The file is in the user folder, at .claude/CLAUDE.md: on Windows %USERPROFILE%\.claude\CLAUDE.md, on macOS ~/.claude/CLAUDE.md.
+   - Download the template as it is, without summarising it: https://raw.githubusercontent.com/IntargetGroup/ai-kit/main/inizia/modelli/CLAUDE-globale.md. If the download fails, stop and tell me to open https://github.com/IntargetGroup/ai-kit/blob/main/inizia/modelli/CLAUDE-globale.md, click «Raw», copy everything and paste it to you.
+   - Fill the «…» placeholders from the CORE and from answers a to e. Remove the <!-- … --> comments and the lines left without content. Stay under 60 lines. Do not add rules that the template does not have.
+   - If the file already exists, do not overwrite it. Propose the merge: what you keep, what you add, what you remove because it repeats the CORE or the template. Write after my yes.
+   - If you cannot write outside this folder, as in Cowork, do not write the file. Tell me that only the Code tab needs it and that we will create it from there.
 
-5. Lo stesso testo per Chat e Cowork. Chat e Cowork non leggono quel file: leggono le impostazioni. Mostrami il testo finale del passo 4 in un solo blocco da copiare. Dimmi dove va: clicco le mie iniziali in basso a sinistra, poi Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude). Chiedimi se in quel campo c'è già un testo. Se sì, chiedimi di incollartelo e proponimi l'unione.
+5. The same text for Chat and Cowork. Chat and Cowork do not read that file: they read the settings. Show me the final text from step 4 in one block to copy. Tell me where it goes: I click my initials at the bottom left, then Impostazioni → Istruzioni per Claude (Settings → Instructions for Claude). Ask me whether that field already has text. If it does, ask me to paste it to you and propose the merge.
 
-6. La cartella.
-   - Per ogni file mancante tra CLAUDE.md, STATO.md, LEGGIMI.md, input/LEGGIMI.md e lavori/LEGGIMI.md, aggiungi il suo percorso a https://raw.githubusercontent.com/IntargetGroup/ai-kit/main/kit/primo-workspace/ e scarica il file originale. Non sostituire i file che ci sono già. Se un download fallisce, elenca i file mancanti e chiedimi il kit prima di crearli.
-   - Se CLAUDE.md è il modello vuoto, compilalo con le risposte f e g. Se è già compilato, tienilo e proponimi solo le modifiche.
-   - Per workspace e progetto scrivi nome e id esatti di whoami. Se un nome è ambiguo, chiedimi quale. Se non ce n'è nessuno, scrivi «nessuno» e non cercarne uno.
-   - Leggi il CORE.md degli spazi confermati. Dimmi in tre righe cosa contengono e la data che dichiarano, oppure «data non disponibile».
-   - Se STATO.md è nuovo, togli i segnaposto: scrivi «Nessun lavoro avviato», «Nessun blocco noto» e, come prossimo passo, il primo lavoro concordato, se c'è. Se STATO.md esiste già, leggilo e proponi un aggiornamento solo se il contenuto cambia. Scrivi la data (AAAA-MM-GG) solo insieme al contenuto.
+6. The folder.
+   - For each missing file among CLAUDE.md, STATO.md, LEGGIMI.md, input/LEGGIMI.md and lavori/LEGGIMI.md, append its path to https://raw.githubusercontent.com/IntargetGroup/ai-kit/main/kit/primo-workspace/ and download the original file. Do not replace files that already exist. If a download fails, list the missing files and ask me for the kit before you create them.
+   - If CLAUDE.md is the empty template, fill it in with answers f and g. If it is already filled in, keep it and propose only the changes.
+   - For workspace and project, write the exact name and id from whoami. If a name is ambiguous, ask me which one. If there is none, write "none" and do not look for one.
+   - Read the CORE.md of the confirmed spaces. Tell me in three lines what they contain and the date they state, or "date not available".
+   - If STATO.md is new, remove the placeholders: write "No work started", "No known blockers" and, as the next step, the first agreed piece of work, if there is one. If STATO.md already exists, read it and propose an update only if the content changes. Write the date (YYYY-MM-DD) only together with the content.
 
-7. Cowork. Dammi questa riga da incollare nelle istruzioni della cartella di Cowork: «All'inizio di ogni attività leggi CLAUDE.md e STATO.md in questa cartella e seguili.» Dimmi dove va: in Cowork seleziono questa cartella, poi apro il pannello Personalizza (Customize) e le istruzioni della cartella.
+7. Cowork. Give me this line, exactly as written and in English, to paste into the Cowork folder instructions: "At the start of every task, read CLAUDE.md and STATO.md in this folder and follow them." Tell me where it goes: in Cowork I select this folder, then open the Personalizza (Customize) panel and the folder instructions.
 
-8. Le preferenze nel CORE. La sezione Preferences del mio CORE personale è la fonte delle mie preferenze: la legge anche l'app Indeck. La sezione «Come lavoro» del file globale ne è la copia di ripiego. Confronta le risposte a, b ed e con Preferences e proponi le righe da aggiungere o correggere. Non ripetere quello che c'è già. Se dico sì, leggi memory_guidance e segui le sue regole. Modifica solo la sezione Preferences e la riga «Ultimo aggiornamento». Poi rileggi il file e dimmi cosa è cambiato. Se la scrittura risponde requires_approval o denied_by_user, dimmi che non è stato scritto nulla. Se la connessione a Indeck è in sola lettura, dammi il testo da aggiungere io dall'app Indeck.
+8. Preferences in the CORE. The Preferences section of my personal CORE is the source of my preferences: the Indeck app reads it too. The "How I work" section of the global file is its fallback copy. Compare answers a, b and e with Preferences and propose the lines to add or correct. Do not repeat what is already there. If I say yes, read memory_guidance and follow its rules. Change only the Preferences section and the «Ultimo aggiornamento» line. Then re-read the file and tell me what changed. If the write returns requires_approval or denied_by_user, tell me that nothing was written. If the Indeck connection is read-only, give me the text to add myself from the Indeck app.
 
-9. Il resoconto. Fai una tabella con tre colonne: verifica, esito (ok, non ok, resta a me), prova.
-   - whoami risponde con la mia email
-   - CORE personale letto, con la data di aggiornamento
-   - CLAUDE.md globale scritto: percorso e numero di righe
-   - testo per le Istruzioni per Claude consegnato
-   - CLAUDE.md della cartella compilato: workspace e progetto con nome e id, oppure «solo scope personale»
-   - CORE degli spazi letti, con la data
-   - riga per Cowork consegnata
-   - preferenze nel CORE: aggiornate, non richieste o non scritte, con il motivo
-   - istruzioni aziendali Intarget osservate nel contesto: sì o no. Non è una prova che siano distribuite. Un «no» non è un errore del setup: le regole essenziali sono nel CLAUDE.md globale.
-   Poi elenca cosa resta da fare a me: incollare il testo nelle Istruzioni per Claude, incollare la riga in Cowork se lo uso, aprire una sessione nuova e fare le prove finali (inizia/README.md, passo 6).
+9. The report. Make a table with three columns: check, result ("ok", "non ok" or "resta a me"), evidence.
+   - whoami answers with my email
+   - personal CORE read, with its update date
+   - global CLAUDE.md written: path and line count
+   - text for Istruzioni per Claude delivered
+   - folder CLAUDE.md filled in: workspace and project with name and id, or "personal scope only"
+   - CORE of the spaces read, with the date
+   - Cowork line delivered
+   - preferences in the CORE: updated, not requested or not written, with the reason
+   - Intarget organisation instructions seen in the context: yes or no. This does not prove that they are deployed. A "no" is not a setup error: the essential rules are in the global CLAUDE.md.
+   Then list what is left for me to do: paste the text into Istruzioni per Claude, paste the line into Cowork if I use it, open a new session and run the final checks (inizia/README.md, step 6).
 ```
 
 ## Dopo il setup

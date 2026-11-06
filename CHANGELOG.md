@@ -2,6 +2,26 @@
 
 Changes that alter what a reader does, newest first.
 
+## 2026-11-06 — English for Claude, technical tracks back
+
+### Changed
+
+- Everything Claude reads as instructions is now English: the two CLAUDE.md templates, `STATO.md`, the setup prompt, the Cowork folder line, the chat-export prompt and the organisation instructions (block and `claudeMd`). Models follow English instructions more reliably; Claude still answers in Italian. Pages for people stay Italian. If your global CLAUDE.md is the Italian v2 text, run the [setup prompt](inizia/prompt-di-setup.md) again: it proposes the merge and overwrites nothing.
+- Organisation managed settings for Claude Code: `managedMcpServers` is removed. The claude.ai editor validates against a schema that types it differently from Claude Code, so it showed an error, and the organisation connector already brings Indeck to Claude Code. `permissions.deny` now also covers the Windows gcloud credentials folder. Admins: replace the published JSON with [the new one](org/rendering/claude-code-managed-settings.json) and the organisation instructions with [the new block](org/rendering/claude-ai.md).
+- The Indeck MCP server instructions v2 (CORE bootstrap) are in production since 2026-11-06.
+
+### Added
+
+- [secondo-cervello/obsidian/](secondo-cervello/obsidian/SPEC.md): the full vault track, optional — the spec Claude Code executes, the build prompt and a dependency-free lint script. Obsidian is a viewer, not a requirement.
+- [engineering/knowledge-management-spec.md](engineering/knowledge-management-spec.md) and [engineering/BOOTSTRAP.md](engineering/BOOTSTRAP.md): agent state, decisions, plans and long runs on a codebase, with a paste-in installer.
+- [guide/presentazione.pdf](guide/presentazione.pdf): the kit in 20 slides, in Italian.
+- [engineering/patterns.md](engineering/patterns.md), [multi-model-orchestration.md](engineering/multi-model-orchestration.md), [skills.md](engineering/skills.md); [tool-orchestration.md](engineering/tool-orchestration.md) regains its depth.
+- Keep only the plugins, skills and MCP servers a project strictly needs, at project or local scope ([engineering/README.md §5](engineering/README.md#5-plugins-and-mcp-servers-worth-it); for connectors, [guide/fonti.md](guide/fonti.md)). The maintainer's note on `superpowers` is in [engineering/skills.md](engineering/skills.md#4-choosing-skills).
+
+### Removed
+
+- `engineering/repo-harness.md`: merged into the knowledge-management spec.
+
 ## 2026-11-05 — v2
 
 The kit is rewritten from scratch. Links to v1 files no longer work. If you have a v1 clone, delete it and clone again.

@@ -1,14 +1,16 @@
-# Indeck MCP — proposed server instructions (v2)
+# Indeck MCP — server instructions (v2)
 
-Status: **proposal, in review in Indeck; not deployed.** The Indeck MCP sends a short `instructions` text to every client at connect (Claude Code, claude.ai, Cowork, ChatGPT, Codex). It is the only org-controlled text that travels with the connector to every client; clients that honour the field put it in context (Claude Code does; claude.ai, Cowork and others are undocumented). The server enforces a 2,000-character budget, and the clients with tight budgets keep only the first ~512 characters, so the first two lines must name `memory_search` and `memory_guidance`.
+Status: **deployed to production on 2026-11-06.** The block below is the text the Indeck MCP sends now. Every client receives it in the MCP handshake, so a session opened before the deploy keeps the old text until it reconnects.
 
-What changes from the current text:
+It is the only org-controlled text that travels with the connector to every client (Claude Code, claude.ai, Cowork, ChatGPT, Codex). Claude Code loads it at session start and cuts it after 4,096 characters ([docs](https://code.claude.com/docs/en/mcp)); for claude.ai, Cowork and other clients, use of the field is undocumented. The server refuses to start with a block over 2,000 characters. The first two lines name `memory_search` and `memory_guidance`, so a client that truncates the text still gets them.
+
+What changed from v1:
 - Adds the session bootstrap ("call whoami, then read the personal CORE.md; read the workspace or project CORE.md when the task names one"). Without it a client never learns who the user is: in the Indeck app the CORE is injected at every turn, over MCP nothing is injected.
 - Says that CORE files are indexes to follow on demand.
 - Says that `memory_search` without scopes searches all the caller's scopes (every read and write still names its scope).
-- Compresses the routines, skill-authoring and connector lines to make room. Routines still run on the owner's accounts and budget. Two mentions move out because the tool descriptions already carry them: `catalog_agents` and `include_write_policy`.
+- Compresses the routines, skill-authoring and connector lines to make room. Routines still run on the owner's accounts and budget. Two mentions moved out because the tool descriptions already carry them: `catalog_agents` and `include_write_policy`.
 
-`node scripts/check.mjs` keeps the block under 2,000 characters.
+Change this text only together with the Indeck release that deploys it. `node scripts/check.mjs` keeps the block under 2,000 characters.
 
 <!-- begin -->
 Indeck is Intarget's shared organizational memory and capability store: governed memory, skills, agent briefs, routines and organisation connectors.

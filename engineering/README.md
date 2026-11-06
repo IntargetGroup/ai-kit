@@ -5,9 +5,13 @@ For engineers who run Claude Code (terminal, IDE or the desktop Code tab) on a c
 | File | Read it when |
 |---|---|
 | this page | you set up a repo for agents, or you review how a repo instructs them |
-| [repo-harness.md](repo-harness.md) | work on the repo spans many sessions or many people |
+| [knowledge-management-spec.md](knowledge-management-spec.md) | work on the repo spans many sessions, compactions or people: state, decisions, plans, long runs |
+| [BOOTSTRAP.md](BOOTSTRAP.md) | you install that harness in an existing repo (paste-in prompt) |
 | [reference-stack.md](reference-stack.md) | you start a new TypeScript web or AI product |
+| [patterns.md](patterns.md) | you build the code around an AI or web product: boundaries, approvals, durable work, audit, scaling past the MVP |
 | [tool-orchestration.md](tool-orchestration.md) | you design tools, MCP servers or agent loops (dated research snapshot) |
+| [multi-model-orchestration.md](multi-model-orchestration.md) | you delegate work from Claude Code to subagents, workflows or another vendor's CLI (dated snapshot) |
+| [skills.md](skills.md) | you choose, install, audit or write a skill |
 
 Platform facts below come from the Claude Code docs as of 2026-11-05 (Claude Code v2.1.3xx). Check `/status` and the linked page before you rely on a version gate.
 
@@ -71,7 +75,7 @@ Do not write file maps, dependency lists or architecture overviews. Claude reads
 | the same rule for every engineer | managed settings (claude.ai admin console) |
 | the change works | tests and CI on every PR |
 | nothing reaches `main` unreviewed | branch protection and restricted credentials on the server; a local deny rule on `git push` is an extra guard |
-| an unattended run stops | `--max-turns` and `--max-budget-usd` in print mode are hard caps. A turn bound in `/goal` is evaluated by the model, not enforced ([goal](https://code.claude.com/docs/en/goal)) |
+| an unattended run stops | `--max-turns` in print mode is a hard cap; `--max-budget-usd` stops on a client-side cost estimate and spend can pass it ([CLI reference](https://code.claude.com/docs/en/cli-reference)). A turn bound in `/goal` is evaluated by the model, not enforced ([goal](https://code.claude.com/docs/en/goal)) |
 
 If you keep adding emphasis to a line and Claude still misses it, the line belongs in a hook or a deny rule. The reverse holds too: a rule with legitimate exceptions belongs in prose. Keep the enforced set small.
 
@@ -98,7 +102,7 @@ exit 0  # no output = no decision; the normal permission flow applies
 
 ## 4. Connect Indeck in the repo
 
-Register the MCP di Indeck once, at user scope, so every repo on the machine has it:
+Register the Indeck MCP server once, at user scope, so every repo on the machine has it:
 
 ```bash
 claude mcp add --scope user --transport http indeck https://mcp.intarget.net/mcp
@@ -110,7 +114,11 @@ In a public repo, never write Indeck workspace or project ids, client names or i
 
 ## 5. Plugins and MCP servers worth it
 
-Install few. Each one adds tool names, skills and possibly hooks to every session.
+Keep only what you strictly need in this project. Every plugin, skill and MCP server adds tool names, skill listings and possibly hooks to every session; more tools do not make outcomes better, and overlapping ones make the agent pick wrong ([tool-orchestration.md §1.1](tool-orchestration.md#11-fewer-higher-level-tools)).
+
+- Install at project or local scope, not user scope, unless you need the tool in every repo ([plugin scopes](https://code.claude.com/docs/en/plugins/install#choose-an-install-scope); `claude mcp add` writes to local scope by default, [MCP scopes](https://code.claude.com/docs/en/mcp#mcp-installation-scopes)).
+- Turn off a server you do not need here in `/mcp`: Claude Code records the choice for this project only and keeps the configuration ([disable a server](https://code.claude.com/docs/en/mcp#disable-a-server-without-removing-it)).
+- Every month, remove what you did not use. `/skill-doctor` flags skills that never run ([skills.md §3](skills.md#3-what-a-skill-costs)).
 
 | Tool | Why | Install |
 |---|---|---|
@@ -119,13 +127,14 @@ Install few. Each one adds tool names, skills and possibly hooks to every sessio
 | `code-review` | independent review of a diff or PR | official marketplace |
 | Context7 (third-party) | current library docs instead of training-data recall | its README; prefer an HTTP server with your own key |
 | Playwright MCP or Chrome DevTools MCP | drive and inspect a real browser to verify UI | pin a version: `npx -y @playwright/mcp@<version>` |
-| GitNexus (optional) | code graph and impact analysis on a large unfamiliar codebase | only when a task needs it; see [repo-harness.md](repo-harness.md#code-intelligence) |
+| GitNexus (optional) | code graph and impact analysis on a large unfamiliar codebase | only when a task needs it; see [knowledge-management-spec.md](knowledge-management-spec.md#14-code-intelligence) |
 
 Rules:
 - Pin versions. Never `@latest` in a command that other people copy.
 - Audit a third-party plugin before install: read `SKILL.md`, hooks, scripts and `bin/`. After install, `claude plugin details <name>` prints its component inventory ([plugin security](https://code.claude.com/docs/en/plugins/security)). Hooks must not write outside the working directory, call undocumented URLs or read credentials.
 - Asking a second model to read a plugin is triage, not an audit. Treat any plugin as a capable but untrusted intern: least permission, sandbox, review.
 - If you cannot evaluate a tool, ask the Innovation Hub before you install it.
+- Skill-specific audit checks (allowed tools, injected shell commands, hooks in frontmatter): [skills.md](skills.md).
 
 ## 6. Verification
 
@@ -140,7 +149,7 @@ Before you leave a run alone, answer the five questions from the [best practices
 1. Does it know what done looks like? Write it as a check.
 2. Can it check its own work? Name the command.
 3. What is it allowed to touch? Narrow the scope ("steps 4 to 7 of the plan"), not "finish the refactor"; use a worktree (`claude -w <name>`).
-4. What stops it? `--max-turns` and `--max-budget-usd` (print mode) are hard caps. A `/goal` clause such as "or stop after N turns" is judged by the model; pair it with a hard cap.
+4. What stops it? `--max-turns` (print mode) is a hard cap; `--max-budget-usd` stops on an estimate, so leave headroom. A `/goal` clause such as "or stop after N turns" is judged by the model; pair it with a hard cap.
 5. Where does the result go, and who signs off? A branch and a PR. A person approves the merge.
 
 Treat a text-only end of turn as a report, not as proof the task is done. Run `bypassPermissions` only in a disposable container with disposable code and no credentials. Pushes, merges, deploys, migrations on shared databases and anything client-visible need a person.
