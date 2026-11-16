@@ -128,6 +128,9 @@ Keep only what you strictly need in this project. Every plugin, skill and MCP se
 | Context7 (third-party) | current library docs instead of training-data recall | its README; prefer an HTTP server with your own key |
 | Playwright MCP or Chrome DevTools MCP | drive and inspect a real browser to verify UI | pin a version: `npx -y @playwright/mcp@<version>` |
 | GitNexus (optional) | code graph and impact analysis on a large unfamiliar codebase | only when a task needs it; see [knowledge-management-spec.md](knowledge-management-spec.md#14-code-intelligence) |
+| pstack (third-party) | Lauren Tan's engineering playbooks from Cursor: `poteto-mode` routes a goal to a playbook and asks for evidence before it reports done | community port [michael-denyer/pstack-claude](https://github.com/michael-denyer/pstack-claude): `/plugin marketplace add michael-denyer/pstack-claude`, then `/plugin install pstack@pstack-claude`. It adds a `SessionStart` hook: audit it first |
+
+To run Claude Code, Codex and other agents side by side from one window (desktop, web or phone), use [T3 Code](https://github.com/pingdotgg/t3code): open source, macOS, Windows and Linux. It drives the agents you already installed and signed in to, so their settings, plugins and hooks still apply.
 
 Rules:
 - Pin versions. Never `@latest` in a command that other people copy.
